@@ -1,153 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, SafeAreaView, Pressable, ScrollView } from 'react-native';
-import React, {useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native'
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Login from './screens/Login';
+import Registro from './screens/Registro';
 
 export default function App() {
-  const [login, onChangeLogin] = React.useState('');
-  const [password, onChangePassword] = React.useState('');
+  const Stack = createNativeStackNavigator();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.titleStyle}>
-          <Text style={styles.subTitleText}>Bem-vindo ao</Text>
-          <Text style={styles.titleText}>ADA</Text>
-        </View>
-        <View style = {styles.inputStyle}>
-          <View style = {{width: "90%", maxWidth: 400}}>
-            <Text style = {styles.baseText}>Email</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeLogin}
-              value={login}
-              placeholder='Insira o seu e-mail institucional'
-            />
-            <Text style={styles.baseText}>Senha</Text>
-            <TextInput
-              secureTextEntry={true}
-              style={styles.input}
-              onChangeText={onChangePassword}
-              value={password}
-              placeholder='Insira sua senha'
-            />
-          </View>
-          <View style = {{width: "90%", maxWidth: 400}}>
-            <View style = {{alignItems:'flex-end', marginTop: 20, marginBottom: 30}}>
-              <Pressable style={styles.baseText}>
-              <Text>Esqueci minha senha</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-        
-        
-        <View>
-          <Pressable style={styles.buttonStyle} onPress={null}>
-            <Text style = {{fontSize: 18}}>Entrar</Text>
-          </Pressable>
-        </View>
-      </ScrollView>
-      <View style = {{marginBottom: 40, alignItems: "center"}}>
-        <Text style={styles.baseText}>Ainda não possui uma conta?</Text>
-        <Pressable >
-          <Text style={styles.baseTextBold}>Registre-se</Text>
-        </Pressable>
-      </View>
-      
-      <View>
-        <StatusBar style="auto" />
-      </View>
-    </SafeAreaView>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Login'>
+          <Stack.Screen name = "Login" component={Login} options={{headerShown: false}}/>
+          <Stack.Screen  name = "Registro" component={Registro} options ={{
+            title: 'Cadastro',
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontSize: 30,
+              fontWeight: 'bold',
+            },
+            headerShadowVisible: false,
+            }}
+            />  
+        </Stack.Navigator> 
+      </NavigationContainer>
+    
   );
 }
 
 const styles = StyleSheet.create({
-  baseText: {
-    fontSize: 16,
-    fontFamily: 'Inter',
-    color: "#1f2937",
-  },
-
-  baseTextBold: {
-    fontSize: 16,
-    fontFamily: 'Inter',
-    color: "#1f2937",
-    fontWeight: "bold",
-  },
-
-  leftbaseText: {
-    fontSize: 16,
-    fontFamily: 'Inter',
-    color: "#1f2937",
-    alignItems: 'flex-end',
-  },
-
-  negritobaseText: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      fontFamily: 'Inter',
-      color: '#1f2937',
-  },
-
-  titleText: {
-    fontSize: 50,
-    fontWeight: 'bold',
-  },
-  
-  subTitleText:
-  {
-    fontSize: 24,
-    fontWeight: 'regular',
-  },
-
   container: {
     flex: 1,
     backgroundColor: 'white',
     //alignItems: 'center',
     //justifyContent: 'center',
-  },
-
-  buttonStyle: {
-    maxWidth: 400,
-    width: "90%",
-    paddingVertical: 12,
-    color: 'black',
-    backgroundColor: '#d1d5db',
-    borderWidth: 0,
-    borderRadius: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    
-  },
-
-  titleStyle: {
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    marginTop: 60,
-    marginBottom: 30,
-  },
-
-  inputStyle: {
-    alignItems: 'center',
-  },
-  
-  inputTitle: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    color: 'd1d5db',
-  },
-
-   input: {
-    backgroundColor: '#e5e7eb', 
-    flexDirection: "row",
-    justifyContent: "center",
-    borderRadius: 4,
-    paddingVertical: 6,
-    marginTop: 10,
-    marginBottom: 10,
-    paddingHorizontal: 10,
   },
 });
