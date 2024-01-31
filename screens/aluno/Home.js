@@ -72,32 +72,29 @@ export default function Home() {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <View
-                style={{
-                  position: "absolute",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <View style={{ flexDirection: "row" }}>
-                  <Pressable>
+              <View style={{ gap: 12 }}>
+                <View>
+                  <Pressable style={{ flexDirection: "row" }}>
                     <FeatherIcons name="book" size={28} />
                     <Text>Nova Materia</Text>
                   </Pressable>
                 </View>
 
-                <View style={{ flexDirection: "row" }}>
-                  <Pressable>
+                <View>
+                  <Pressable style={{ flexDirection: "row" }}>
                     <FeatherIcons name="edit" size={28} />
                     <Text>Anotação Pessoal</Text>
                   </Pressable>
                 </View>
               </View>
               <Pressable
-                style={[styles.button, styles.buttonClose]}
+                style={{
+                  backgroundColor: "grey",
+                  borderRadius: 4,
+                }}
                 onPress={() => setModalVisible(!modalVisible)}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Cancelar</Text>
               </Pressable>
             </View>
           </View>
@@ -114,7 +111,7 @@ export default function Home() {
           <Pressable
             style={
               dateFormatView == "week"
-                ? { ...styles.weekButtom, ...styles.buttonON }
+                ? [styles.weekButtom, styles.buttonON]
                 : styles.weekButtom
             }
             onPress={() => changeDateFormat("week")}
@@ -124,7 +121,7 @@ export default function Home() {
           <Pressable
             style={
               dateFormatView == "month"
-                ? { ...styles.monthButtom, ...styles.buttonON }
+                ? [styles.monthButtom, styles.buttonON]
                 : styles.monthButtom
             }
             onPress={() => changeDateFormat("month")}
@@ -195,7 +192,6 @@ const styles = StyleSheet.create({
 
   centeredView: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
   },
@@ -205,7 +201,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 95,
-    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
