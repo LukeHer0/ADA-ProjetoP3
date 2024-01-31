@@ -69,7 +69,9 @@ export default function Login({ navigation }) {
       <View style={{ marginBottom: 40, alignItems: "center" }}>
         <Text style={styles.baseText}>Ainda não possui uma conta?</Text>
         <Pressable hitSlop={24} onPress={() => navigation.navigate("Registro")}>
-          <Text style={styles.baseTextBold}>Registre-se</Text>
+          <Text style={(styles.baseText, { fontWeight: "bold" })}>
+            Registre-se
+          </Text>
         </Pressable>
       </View>
 
@@ -83,29 +85,13 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   baseText: {
     fontSize: 16,
-    //   fontFamily: 'Inter',
     color: "#1f2937",
-  },
-
-  baseTextBold: {
-    fontSize: 16,
-    //   fontFamily: 'Inter',
-    color: "#1f2937",
-    fontWeight: "bold",
   },
 
   leftbaseText: {
     fontSize: 16,
-    //   fontFamily: 'Inter',
     color: "#1f2937",
     alignItems: "flex-end",
-  },
-
-  negritobaseText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    // fontFamily: 'Inter',
-    color: "#1f2937",
   },
 
   titleText: {

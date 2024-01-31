@@ -1,9 +1,8 @@
 import FeatherIcons from "@expo/vector-icons/Feather";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-//import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View, Pressable, ScrollView } from "react-native";
+import { View, Pressable, StyleSheet } from "react-native";
 
 import EsqueciMinhaSenha from "./screens/EsqueciMinhaSenha";
 import Login from "./screens/Login";
@@ -15,7 +14,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeAluno">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
           component={Login}
@@ -58,9 +57,7 @@ export default function App() {
             },
             headerShadowVisible: false,
             headerRight: () => (
-              <View
-                style={{ gap: 20, flexDirection: "row", alignItems: "center" }}
-              >
+              <View style={styles.headerIcons}>
                 <Pressable>
                   <FeatherIcons name="bell" size={28} />
                 </Pressable>
@@ -77,10 +74,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    //alignItems: 'center',
-    //justifyContent: 'center',
+  headerIcons: {
+    gap: 20,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

@@ -1,5 +1,6 @@
+/* eslint-disable eqeqeq */
 import FeatherIcons from "@expo/vector-icons/Feather";
-import React, { useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -7,41 +8,101 @@ import {
   SafeAreaView,
   Pressable,
   TouchableOpacity,
+  Modal,
 } from "react-native";
+import { Calendar, LocaleConfig } from "react-native-calendars";
 
-import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
-
-LocaleConfig.locales['pt-br'] = {
+LocaleConfig.locales["pt-br"] = {
   monthNames: [
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro'
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
   ],
-  monthNamesShort: ['Jan.', 'Fev.', 'Mar.', 'Abr.', 'Mai.', 'Jun.', 'Jul.', 'Ago.', 'Set.', 'Out.', 'Nov.', 'Dez.'],
-  dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-  dayNamesShort: ['Dom.', 'Seg.', 'Ter.', 'Qua.', 'Qui.', 'Sex.', 'Sáb.'],
-  today: "Hoje"
+  monthNamesShort: [
+    "Jan.",
+    "Fev.",
+    "Mar.",
+    "Abr.",
+    "Mai.",
+    "Jun.",
+    "Jul.",
+    "Ago.",
+    "Set.",
+    "Out.",
+    "Nov.",
+    "Dez.",
+  ],
+  dayNames: [
+    "Domingo",
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+  ],
+  dayNamesShort: ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sáb."],
+  today: "Hoje",
 };
-LocaleConfig.defaultLocale = 'pt-br';
-
-
-//import {Calendar, LocaleConfig} from 'react-native-calendars';
+LocaleConfig.defaultLocale = "pt-br";
 
 export default function Home() {
-  const [butao, onChangeButao] = React.useState("semana");
-  const [selected, setSelected] = React.useState('');
+  const [dateFormatView, changeDateFormat] = React.useState("week");
+  const [selected, setSelected] = React.useState("");
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.centeredView}>
+        <Modal
+          transparent
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View
+                style={{
+                  position: "absolute",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <Pressable>
+                    <FeatherIcons name="book" size={28} />
+                    <Text>Nova Materia</Text>
+                  </Pressable>
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <Pressable>
+                    <FeatherIcons name="edit" size={28} />
+                    <Text>Anotação Pessoal</Text>
+                  </Pressable>
+                </View>
+              </View>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+      </View>
       <View style={styles.gapContainer}>
         <View
           style={{
@@ -52,36 +113,39 @@ export default function Home() {
         >
           <Pressable
             style={
-              butao == "semana"
-                ? { ...styles.butaoSemana, ...styles.butaoON }
-                : styles.butaoSemana
+              dateFormatView == "week"
+                ? { ...styles.weekButtom, ...styles.buttonON }
+                : styles.weekButtom
             }
-            onPress={() => onChangeButao("semana")}
+            onPress={() => changeDateFormat("week")}
           >
             <Text styles={styles.baseText}>Semana</Text>
           </Pressable>
           <Pressable
             style={
-              butao == "mes"
-                ? { ...styles.butaoMes, ...styles.butaoON }
-                : styles.butaoMes
+              dateFormatView == "month"
+                ? { ...styles.monthButtom, ...styles.buttonON }
+                : styles.monthButtom
             }
-            onPress={() => onChangeButao("mes")}
+            onPress={() => changeDateFormat("month")}
           >
             <Text styles={styles.baseText}>Mês</Text>
           </Pressable>
         </View>
-
         <Calendar
-          onDayPress={day =>{
+          onDayPress={(day) => {
             setSelected(day.dateString);
           }}
           markedDates={{
-            [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'black'}
+            [selected]: {
+              selected: true,
+              disableTouchEvent: true,
+              selectedDotColor: "black",
+            },
           }}
-          />
+        />
 
-          <TouchableOpacity
+        <TouchableOpacity
           style={{
             position: "absolute",
             bottom: 30,
@@ -93,6 +157,7 @@ export default function Home() {
             alignItems: "center",
             justifyContent: "center",
           }}
+          onPress={() => setModalVisible(true)}
         >
           <FeatherIcons name="plus" size={45} color="white" />
         </TouchableOpacity>
@@ -108,7 +173,7 @@ const styles = StyleSheet.create({
     color: "#1f2937",
   },
 
-  butaoSemana: {
+  weekButtom: {
     paddingVertical: 10,
     borderTopLeftRadius: 7,
     borderBottomLeftRadius: 7,
@@ -117,7 +182,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  butaoMes: {
+  monthButtom: {
     paddingVertical: 10,
     borderTopRightRadius: 7,
     borderBottomRightRadius: 7,
@@ -126,15 +191,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  butaoON: {
-    backgroundColor: "#d9d9d9",
+  buttonON: { backgroundColor: "#d9d9d9" },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
   },
 
-  baseTextBold: {
-    fontSize: 16,
-    //   fontFamily: 'Inter',
-    color: "#1f2937",
-    fontWeight: "bold",
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 95,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 
   headerStyle: {
@@ -143,44 +227,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-
-  leftbaseText: {
-    fontSize: 16,
-    //   fontFamily: 'Inter',
-    color: "#1f2937",
-    alignItems: "flex-end",
-  },
-
-  negritobaseText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    // fontFamily: 'Inter',
-    color: "#1f2937",
-  },
-
-  titleText: {
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-
-  subTitleText: {
-    fontSize: 24,
-    fontWeight: "regular",
-  },
-
-  buttonStyle: {
-    maxWidth: 400,
-    width: "90%",
-    paddingVertical: 12,
-    color: "black",
-    backgroundColor: "#d1d5db",
-    borderWidth: 0,
-    borderRadius: 4,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: "auto",
-    marginRight: "auto",
   },
 
   container: {
@@ -194,26 +240,5 @@ const styles = StyleSheet.create({
     maxWidth: "90%",
     marginLeft: "5%",
     height: "100%",
-  },
-
-  inputStyle: {
-    alignItems: "center",
-  },
-
-  inputTitle: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    color: "d1d5db",
-  },
-
-  input: {
-    backgroundColor: "#e5e7eb",
-    flexDirection: "row",
-    justifyContent: "center",
-    borderRadius: 4,
-    paddingVertical: 6,
-    marginTop: 10,
-    marginBottom: 10,
-    paddingHorizontal: 10,
   },
 });

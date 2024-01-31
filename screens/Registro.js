@@ -1,14 +1,21 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, 
-    Text, View, TextInput, SafeAreaView, Pressable, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  SafeAreaView,
+  Pressable,
+  ScrollView,
+} from "react-native";
 
 export default function Registro({ navigation }) {
-  const [nome, onChangeNome] = React.useState("");
-  const [login, onChangeLogin] = React.useState("");
-  const [senha, onChangePassword] = React.useState("");
-  const [senha2, onChangePassword2] = React.useState("");
-  const [matricula, onChangeId] = React.useState("");
+  const [nome, setNome] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [senha, setPassword] = React.useState("");
+  const [senha2, setPassword2] = React.useState("");
+  const [matricula, setId] = React.useState("");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -18,7 +25,7 @@ export default function Registro({ navigation }) {
             <Text style={styles.baseText}>Nome completo</Text>
             <TextInput
               style={styles.input}
-              onChangeText={onChangeNome}
+              onChangeText={setNome}
               value={nome}
               placeholder="Insira o seu nome completo"
             />
@@ -28,8 +35,8 @@ export default function Registro({ navigation }) {
             <Text style={styles.baseText}>Email</Text>
             <TextInput
               style={styles.input}
-              onChangeText={onChangeLogin}
-              value={login}
+              onChangeText={setEmail}
+              value={email}
               placeholder="Insira o seu email"
             />
           </View>
@@ -39,7 +46,7 @@ export default function Registro({ navigation }) {
             <TextInput
               secureTextEntry
               style={styles.input}
-              onChangeText={onChangePassword}
+              onChangeText={setPassword}
               value={senha}
               placeholder="Insira sua senha"
             />
@@ -50,7 +57,7 @@ export default function Registro({ navigation }) {
             <TextInput
               secureTextEntry
               style={styles.input}
-              onChangeText={onChangePassword2}
+              onChangeText={setPassword2}
               value={senha2}
               placeholder="Confirme sua senha"
             />
@@ -60,7 +67,7 @@ export default function Registro({ navigation }) {
             <Text style={styles.baseText}>Nº de matrícula</Text>
             <TextInput
               style={styles.input}
-              onChangeText={onChangeId}
+              onChangeText={setId}
               value={matricula}
               placeholder="Insira o seu nº de matrícula"
             />
