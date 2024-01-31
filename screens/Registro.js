@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
   StyleSheet,
@@ -80,9 +79,6 @@ export default function Registro({ navigation }) {
           </View>
         </View>
       </ScrollView>
-      <View>
-        <StatusBar style="auto" />
-      </View>
     </SafeAreaView>
   );
 }

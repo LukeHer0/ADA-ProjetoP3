@@ -5,9 +5,9 @@ import React from "react";
 import { StyleSheet, Text, SafeAreaView, SectionList } from "react-native";
 
 import Calendar from "../../components/Calendar";
-import ClassCard from "../../components/ClassCard";
 import InfoClass from "../../components/InfoClass";
 import PlusButton from "../../components/PlusButton";
+import ClassCardP from "../../components/classCardP";
 import { aulasAtom } from "../../utils/aulas";
 
 export default function Home({ navigation }) {
@@ -35,12 +35,13 @@ export default function Home({ navigation }) {
           },
         ]}
         renderItem={({ item }) => (
-          <ClassCard
+          <ClassCardP
             title={item.title}
             time={item.time}
             description={item.description}
             handleCardPress={() => handleCardPress(item.id)}
             status={item.status}
+            id={item.id}
           />
         )}
         renderSectionHeader={({ section }) => (

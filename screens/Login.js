@@ -1,4 +1,4 @@
-import { StatusBar } from "expo-status-bar";
+import { useAtom } from "jotai";
 import React from "react";
 import {
   StyleSheet,
@@ -8,11 +8,33 @@ import {
   SafeAreaView,
   Pressable,
   ScrollView,
+  Alert,
 } from "react-native";
+
+import { userTypeAtom } from "../utils/states";
 
 export default function Login({ navigation }) {
   const [login, onChangeLogin] = React.useState("");
   const [password, onChangePassword] = React.useState("");
+  const [_, setUserType] = useAtom(userTypeAtom);
+
+  const handleSubmit = () => {
+    const loginValue = login.toLowerCase().trim();
+
+    if (loginValue !== "aluno" && loginValue !== "professor")
+      return Alert.alert(
+        "Usuário não encontrado",
+        "Verifique as credenciais e tente novamente. Caso o erro persista, entre em contato com a secretaria.",
+      );
+
+    if (loginValue === "aluno") {
+      setUserType("aluno");
+    }
+    if (loginValue === "professor") setUserType("professor");
+
+    navigation.navigate("Home");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -57,10 +79,7 @@ export default function Login({ navigation }) {
         </View>
 
         <View>
-          <Pressable
-            style={styles.buttonStyle}
-            onPress={() => navigation.navigate("HomeAluno")}
-          >
+          <Pressable style={styles.buttonStyle} onPress={handleSubmit}>
             <Text style={{ fontSize: 18 }}>Entrar</Text>
           </Pressable>
         </View>
@@ -73,10 +92,6 @@ export default function Login({ navigation }) {
             Registre-se
           </Text>
         </Pressable>
-      </View>
-
-      <View>
-        <StatusBar style="auto" />
       </View>
     </SafeAreaView>
   );

@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
   StyleSheet,
@@ -40,9 +39,6 @@ export default function EsqueciMinhaSenha() {
           </View>
         </View>
       </ScrollView>
-      <View>
-        <StatusBar style="auto" />
-      </View>
     </SafeAreaView>
   );
 }

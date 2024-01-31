@@ -1,20 +1,38 @@
 import FeatherIcons from "@expo/vector-icons/Feather";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
+import { useAtom } from "jotai";
+import React, { useState } from "react";
 import { View, Pressable, StyleSheet } from "react-native";
 
+import ChangeUserInfo from "./components/ChangeUserInfo";
+import MenuHamburger from "./components/MenuHamburger";
 import EsqueciMinhaSenha from "./screens/EsqueciMinhaSenha";
 import Login from "./screens/Login";
 import Registro from "./screens/Registro";
+import AddMateria from "./screens/aluno/AddMateria";
 import HomeAluno from "./screens/aluno/Home";
+import ListMateria from "./screens/aluno/ListMaterias";
+import HomeProfessor from "./screens/professor/Home";
+import HomeSecretaria from "./screens/secretaria/Home";
+import { userTypeAtom } from "./utils/states";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
+  const [userType] = useAtom(userTypeAtom);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{
+          headerTitleStyle: {
+            fontSize: 26,
+
+            fontWeight: "bold",
+          },
+        }}
+      >
         <Stack.Screen
           name="Login"
           component={Login}
@@ -26,10 +44,6 @@ export default function App() {
           options={{
             title: "Cadastro",
             headerTitleAlign: "center",
-            headerTitleStyle: {
-              fontSize: 30,
-              fontWeight: "bold",
-            },
             headerShadowVisible: false,
           }}
         />
@@ -39,33 +53,83 @@ export default function App() {
           options={{
             title: "Esqueci minha senha",
             headerTitleAlign: "center",
+
+            headerShadowVisible: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="Home"
+          component={
+            userType === "aluno"
+              ? HomeAluno
+              : userType === "professor"
+                ? HomeProfessor
+                : HomeSecretaria
+          }
+          options={({ navigation }) => ({
+            title: "Suas atividades",
+            headerBackVisible: false,
+            headerShadowVisible: false,
+
+            headerRight: () => (
+              <View style={styles.headerIcons}>
+                <MenuHamburger navigation={navigation} />
+                {/* <Pressable>
+                  <FeatherIcons name="menu" size={28} />
+                </Pressable> */}
+              </View>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="addMateria"
+          component={AddMateria}
+          options={{
+            title: "Adicionar Matéria",
+            headerTitleAlign: "center",
             headerTitleStyle: {
               fontSize: 30,
-              fontWeight: "bold",
+              fontWeight: "semi-bold",
             },
             headerShadowVisible: false,
           }}
         />
         <Stack.Screen
-          name="HomeAluno"
-          component={HomeAluno}
-          options={{
-            title: "Suas atividades",
+          name="ListMateria"
+          component={ListMateria}
+          options={() => ({
+            title: "Suas matérias",
             headerTitleStyle: {
               fontSize: 30,
               fontWeight: "semi-bold",
             },
+            headerBackVisible: false,
             headerShadowVisible: false,
             headerRight: () => (
               <View style={styles.headerIcons}>
                 <Pressable>
                   <FeatherIcons name="bell" size={28} />
                 </Pressable>
-                <Pressable>
+                <MenuHamburger />
+                {/* <Pressable>
                   <FeatherIcons name="menu" size={28} />
-                </Pressable>
+                </Pressable> */}
               </View>
             ),
+          })}
+        />
+        <Stack.Screen
+          name="ChangeUserInfo"
+          component={ChangeUserInfo}
+          options={{
+            title: "Editar usuário",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontSize: 30,
+              fontWeight: "semi-bold",
+            },
+            headerShadowVisible: false,
           }}
         />
       </Stack.Navigator>
