@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAtom } from "jotai";
 import React, { useState } from "react";
-import { View, Pressable, StyleSheet } from "react-native";
+import { View, Pressable, StyleSheet, TouchableOpacity } from "react-native";
 
 import ChangeUserInfo from "./components/ChangeUserInfo";
 import MenuHamburger from "./components/MenuHamburger";
@@ -16,6 +16,7 @@ import ListMateria from "./screens/aluno/ListMaterias";
 import HomeProfessor from "./screens/professor/Home";
 import HomeSecretaria from "./screens/secretaria/Home";
 import { userTypeAtom } from "./utils/states";
+import Notifications from "./screens/aluno/Notifications";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -74,6 +75,9 @@ export default function App() {
 
             headerRight: () => (
               <View style={styles.headerIcons}>
+                <TouchableOpacity onPress={() => navigation.navigate("Notifications")}>
+                  <FeatherIcons name="bell" size={26} />
+                </TouchableOpacity>
                 <MenuHamburger navigation={navigation} />
                 {/* <Pressable>
                   <FeatherIcons name="menu" size={28} />
@@ -81,6 +85,16 @@ export default function App() {
               </View>
             ),
           })}
+        />
+        <Stack.Screen
+          name="Notifications"
+          component={Notifications}
+          options={{
+            headerBackVisible: true,
+            title: "Notificações",
+            headerTitleAlign: "center",
+            headerShadowVisible: false,
+          }}
         />
         <Stack.Screen
           name="addMateria"
