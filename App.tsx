@@ -2,7 +2,7 @@ import FeatherIcons from "@expo/vector-icons/Feather";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAtom } from "jotai";
-import React, { useState } from "react";
+import React from "react";
 import { View, Pressable, StyleSheet, TouchableOpacity } from "react-native";
 
 import ChangeUserInfo from "./components/ChangeUserInfo";
@@ -13,14 +13,14 @@ import Registro from "./screens/Registro";
 import AddMateria from "./screens/aluno/AddMateria";
 import HomeAluno from "./screens/aluno/Home";
 import ListMateria from "./screens/aluno/ListMaterias";
-import HomeProfessor from "./screens/professor/Home";
-import HomeSecretaria from "./screens/secretaria/Home";
-import { userTypeAtom } from "./utils/states";
 import Notifications from "./screens/aluno/Notifications";
+import HomeProfessor from "./screens/professor/Home";
+import { useAuthStore } from "./stores/authStore";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
-  const [userType] = useAtom(userTypeAtom);
+
+  const user = useAuthStore((state) => state.user);
 
   return (
     <NavigationContainer>
@@ -61,13 +61,7 @@ export default function App() {
 
         <Stack.Screen
           name="Home"
-          component={
-            userType === "aluno"
-              ? HomeAluno
-              : userType === "professor"
-                ? HomeProfessor
-                : HomeSecretaria
-          }
+          component={user?.is_student ? HomeAluno : HomeProfessor}
           options={({ navigation }) => ({
             title: "Suas atividades",
             headerBackVisible: false,
@@ -75,13 +69,12 @@ export default function App() {
 
             headerRight: () => (
               <View style={styles.headerIcons}>
-                <TouchableOpacity onPress={() => navigation.navigate("Notifications")}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Notifications")}
+                >
                   <FeatherIcons name="bell" size={26} />
                 </TouchableOpacity>
-                <MenuHamburger navigation={navigation} />
-                {/* <Pressable>
-                  <FeatherIcons name="menu" size={28} />
-                </Pressable> */}
+                <MenuHamburger />
               </View>
             ),
           })}
@@ -104,7 +97,7 @@ export default function App() {
             headerTitleAlign: "center",
             headerTitleStyle: {
               fontSize: 30,
-              fontWeight: "semi-bold",
+              fontWeight: "bold",
             },
             headerShadowVisible: false,
           }}
@@ -116,7 +109,7 @@ export default function App() {
             title: "Suas matérias",
             headerTitleStyle: {
               fontSize: 30,
-              fontWeight: "semi-bold",
+              fontWeight: "bold",
             },
             headerBackVisible: false,
             headerShadowVisible: false,
@@ -141,7 +134,7 @@ export default function App() {
             headerTitleAlign: "center",
             headerTitleStyle: {
               fontSize: 30,
-              fontWeight: "semi-bold",
+              fontWeight: "bold",
             },
             headerShadowVisible: false,
           }}

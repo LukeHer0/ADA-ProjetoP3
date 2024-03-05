@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
 
   subTitleText: {
     fontSize: 24,
-    fontWeight: "regular",
+    fontWeight: "normal",
   },
 
   buttonStyle: {

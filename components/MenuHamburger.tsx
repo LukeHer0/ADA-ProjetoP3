@@ -1,5 +1,5 @@
 import FeatherIcons from "@expo/vector-icons/Feather";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { useState } from "react";
 import {
   Pressable,
@@ -11,11 +11,12 @@ import {
 import Modal from "react-native-modal";
 
 import UserInfo from "./UserInfo";
+import { RootStackParamList } from "../screens";
 
-export default function MenuHamburger({ options }) {
+export default function MenuHamburger() {
   const [modalVisible, setModalVisible] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -112,10 +113,7 @@ export default function MenuHamburger({ options }) {
         </View>
       </Modal>
 
-      <UserInfo
-        open={showUserInfo}
-        closeModal={() => setShowUserInfo(false)}
-      />
+      <UserInfo open={showUserInfo} closeModal={() => setShowUserInfo(false)} />
 
       {/* <Modal
         transparent
@@ -147,7 +145,7 @@ const styles = StyleSheet.create({
 
   baseText: {
     fontSize: 18,
-    color: "6B7280",
+    color: "#6B7280",
   },
 
   modalView: {

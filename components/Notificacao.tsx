@@ -1,53 +1,36 @@
-
+import FeatherIcons from "@expo/vector-icons/Feather";
 import React from "react";
-import { StyleSheet, Text, View, TextInput, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-import { Materia } from "../../components/Materia";
-import PlusButton from "../../components/PlusButton";
-
-const materias = [
-  {
-    title: "Matemática",
-    teacherName: "Prof. Beltrano",
-    code: "MAT001",
-  },
-  {
-    title: "Matemática",
-    teacherName: "Prof. Beltrano",
-    code: "MAT001",
-  },
-  {
-    title: "Matemática",
-    teacherName: "Prof. Beltrano",
-    code: "MAT001",
-  },
-];
-
-export default function ListMateria({ navigation }) {
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={{ marginLeft: "5%", marginTop: "8%" }}>
-        <Text style={styles.titleText}>Matérias disponíveis</Text>
+export function Notificacao({ title, desc }) {
+  const [showNotif, setShowNotif] = React.useState(true);
+  return showNotif ? (
+    <View style={styles.notificStyle}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={styles.materiaTitle}>{title}</Text>
+        <FeatherIcons
+          name="x"
+          size={32}
+          style={{ color: "#d5d7db" }}
+          onPress={() => {
+            setShowNotif(false);
+          }}
+        />
       </View>
-      <View style={{ alignItems: "center", marginTop: "5%" }}>
-        {materias.map((materia, index) => (
-          <Materia key={index} {...materia} />
-        ))}
-      </View>
-      <PlusButton navigation={navigation} />
-    </SafeAreaView>
-  );
+      <Text style={styles.baseText}>{desc}</Text>
+    </View>
+  ) : null;
 }
 
 const styles = StyleSheet.create({
-  materiaStyle: {
-    flexDirection: "row",
+  notificStyle: {
+    flexDirection: "column",
     justifyContent: "space-between",
-    backgroundColor: "#e5e7eb",
-    width: "90%",
-    borderRadius: 10,
+    borderColor: "#e5e7eb",
+    borderWidth: 1,
+    width: "100%",
+    marginBottom: -0.5,
     paddingVertical: 15,
-    marginBottom: 10,
     paddingHorizontal: 20,
   },
   baseText: {
@@ -60,10 +43,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  leftbaseText: {
-    fontSize: 16,
+  rightbaseText: {
+    fontSize: 26,
     color: "#1f2937",
-    alignItems: "flex-end",
+    alignItems: "flex-start",
   },
 
   titleText: {
@@ -73,7 +56,6 @@ const styles = StyleSheet.create({
 
   subTitleText: {
     fontSize: 24,
-    fontWeight: "regular",
   },
 
   searchSection: {

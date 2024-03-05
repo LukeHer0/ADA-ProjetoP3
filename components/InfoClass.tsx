@@ -6,7 +6,17 @@ import Modal from "react-native-modal";
 
 import { aulasAtom } from "../utils/aulas";
 
-export default function InfoClass({ name, open, closeModal, classId }) {
+type InfoClassProps = {
+  open: boolean;
+  closeModal: () => void;
+  classId: number;
+};
+
+export default function InfoClass({
+  open,
+  closeModal,
+  classId,
+}: InfoClassProps) {
   const [aulas] = useAtom(aulasAtom);
   const selectedClass = aulas.find((aula) => aula.id === classId);
 

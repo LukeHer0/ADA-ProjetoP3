@@ -1,39 +1,57 @@
-import { useAtom } from "jotai";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
+import { useForm } from "react-hook-form";
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   SafeAreaView,
   Pressable,
   ScrollView,
   Alert,
 } from "react-native";
+import { z } from "zod";
 
-import { userTypeAtom } from "../utils/states";
+import { Input } from "../components/Input";
+import { api } from "../config/api";
+import { useAuthStore } from "../stores/authStore";
+
+const validationSchema = z.object({
+  email: z.string().email("Insira um e-mail válido."),
+  password: z
+    .string({
+      invalid_type_error: "Insira uma senha válida.",
+    })
+    .min(1, "Insira sua senha."),
+});
+
+type FormData = z.infer<typeof validationSchema>;
 
 export default function Login({ navigation }) {
-  const [login, onChangeLogin] = React.useState("");
-  const [password, onChangePassword] = React.useState("");
-  const [_, setUserType] = useAtom(userTypeAtom);
+  const { control, handleSubmit, formState } = useForm<FormData>({
+    resolver: zodResolver(validationSchema),
+  });
 
-  const handleSubmit = () => {
-    const loginValue = login.toLowerCase().trim();
+  const saveToken = useAuthStore((state) => state.saveToken);
 
-    if (loginValue !== "aluno" && loginValue !== "professor")
-      return Alert.alert(
-        "Usuário não encontrado",
-        "Verifique as credenciais e tente novamente. Caso o erro persista, entre em contato com a secretaria.",
-      );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const response = await api.post<{
+        refresh: string;
+        access: string;
+        is_student: boolean;
+        is_teacher: boolean;
+        is_secretary: boolean;
+      }>("/token/", data);
 
-    if (loginValue === "aluno") {
-      setUserType("aluno");
+      saveToken(response.data.access);
+
+      navigation.navigate("Home");
+    } catch (e) {
+      Alert.alert("Erro", "E-mail ou senha inválidos.");
     }
-    if (loginValue === "professor") setUserType("professor");
-
-    navigation.navigate("Home");
-  };
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,20 +63,26 @@ export default function Login({ navigation }) {
         <View style={styles.inputStyle}>
           <View style={{ width: "90%", maxWidth: 400 }}>
             <Text style={styles.baseText}>Email</Text>
-            <TextInput
+            <Input
+              name="email"
+              control={control}
               style={styles.input}
-              onChangeText={onChangeLogin}
-              value={login}
               placeholder="Insira o seu e-mail institucional"
             />
+            <Text style={{ color: "red" }}>
+              {formState.errors.email?.message}
+            </Text>
             <Text style={styles.baseText}>Senha</Text>
-            <TextInput
+            <Input
+              name="password"
+              control={control}
               secureTextEntry
               style={styles.input}
-              onChangeText={onChangePassword}
-              value={password}
               placeholder="Insira sua senha"
             />
+            <Text style={{ color: "red" }}>
+              {formState.errors.password?.message}
+            </Text>
           </View>
           <View style={{ width: "90%", maxWidth: 400 }}>
             <View
@@ -79,7 +103,7 @@ export default function Login({ navigation }) {
         </View>
 
         <View>
-          <Pressable style={styles.buttonStyle} onPress={handleSubmit}>
+          <Pressable style={styles.buttonStyle} onPress={onSubmit}>
             <Text style={{ fontSize: 18 }}>Entrar</Text>
           </Pressable>
         </View>
@@ -116,7 +140,6 @@ const styles = StyleSheet.create({
 
   subTitleText: {
     fontSize: 24,
-    fontWeight: "regular",
   },
 
   buttonStyle: {
@@ -136,8 +159,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    //alignItems: 'center',
-    //justifyContent: 'center',
   },
 
   titleStyle: {

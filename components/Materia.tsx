@@ -1,4 +1,3 @@
-import FeatherIcons from "@expo/vector-icons/Feather";
 import { StyleSheet, Text, View } from "react-native";
 
 export function Materia({ title, teacherName, code }) {
@@ -56,7 +55,6 @@ const styles = StyleSheet.create({
 
   subTitleText: {
     fontSize: 24,
-    fontWeight: "regular",
   },
 
   searchSection: {

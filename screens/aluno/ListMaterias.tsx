@@ -1,38 +1,39 @@
-
 import React from "react";
-import { StyleSheet, Text, View, TextInput, SafeAreaView, Pressable } from "react-native";
+import { StyleSheet, Text, View, TextInput, SafeAreaView } from "react-native";
 
 import { Materia } from "../../components/Materia";
 import PlusButton from "../../components/PlusButton";
 
-import { Notificacao } from "../../components/Notificacao";
-
-
-var notificacoes = [
+const materias = [
   {
-    title: "Aula cancelada",
-    desc: "A aula de Circuitos Digitais foi cancelada",
+    title: "Matemática",
+    teacherName: "Prof. Beltrano",
+    code: "MAT001",
   },
   {
-    title: "Aula cancelada",
-    desc: "A aula de Circuitos Digitais foi cancelada",
+    title: "Matemática",
+    teacherName: "Prof. Beltrano",
+    code: "MAT001",
   },
   {
-    title: "Aula cancelada",
-    desc: "A aula de Circuitos Digitais foi cancelada",
+    title: "Matemática",
+    teacherName: "Prof. Beltrano",
+    code: "MAT001",
   },
 ];
 
-export default function Notifications({ navigation }) {
+export default function ListMateria({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ alignItems: "center", marginTop: "5%" }}>
-        <View style={{ alignItems: "center", marginTop: "5%", width :"100%" }}>
-          {notificacoes.map((notif, index) => (
-            <Notificacao key={index} {...notif} />
-          ))}
-        </View>
+      <View style={{ marginLeft: "5%", marginTop: "8%" }}>
+        <Text style={styles.titleText}>Matérias disponíveis</Text>
       </View>
+      <View style={{ alignItems: "center", marginTop: "5%" }}>
+        {materias.map((materia, index) => (
+          <Materia key={index} {...materia} />
+        ))}
+      </View>
+      <PlusButton navigation={navigation} />
     </SafeAreaView>
   );
 }
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
 
   subTitleText: {
     fontSize: 24,
-    fontWeight: "regular",
+    fontWeight: "normal",
   },
 
   searchSection: {

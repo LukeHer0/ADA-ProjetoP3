@@ -1,4 +1,3 @@
-import FeatherIcons from "@expo/vector-icons/Feather";
 import React from "react";
 import {
   StyleSheet,
@@ -18,21 +17,21 @@ export default function ChangeUserInfo() {
     <SafeAreaView style={{ backgroundColor: "#e5e7eb" }}>
       <View style={{ backgroundColor: "white", marginTop: "25%" }}>
         <View style={{ width: "90%", maxWidth: 400 }}>
-          <Text style={styles.baseText}>Nome</Text>
+          <Text>Nome</Text>
           <TextInput
             style={styles.input}
             onChangeText={setNome}
             value={nome}
             placeholder="Insira o seu nome"
           />
-          <Text style={styles.baseText}>Email</Text>
+          <Text>Email</Text>
           <TextInput
             style={styles.input}
             onChangeText={setEmail}
             value={email}
             placeholder="Insira o seu e-mail"
           />
-          <Text style={styles.baseText}>N° da Matrícula</Text>
+          <Text>N° da Matrícula</Text>
           <TextInput
             style={styles.input}
             onChangeText={setID}
@@ -48,7 +47,7 @@ export default function ChangeUserInfo() {
           }}
         >
           <Pressable hitSlop={24} onPress={() => {}}>
-            <Text style={styles.baseText}>Alterar minha senha</Text>
+            <Text>Alterar minha senha</Text>
           </Pressable>
         </View>
       </View>

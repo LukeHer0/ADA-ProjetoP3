@@ -54,7 +54,7 @@ export default function Calendar({ open }) {
   const marked = useRef(getMarkedDates());
 
   return (
-    <CalendarProvider date={Date.now()}>
+    <CalendarProvider date={String(Date.now())}>
       <ExpandableCalendar
         style={{ position: "relative", elevation: 1, zIndex: 2000 }}
         markedDates={marked.current}

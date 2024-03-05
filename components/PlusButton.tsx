@@ -10,11 +10,7 @@ import {
   View,
 } from "react-native";
 
-// {
-//   label: "Adicionar atividade",
-//   onPress: () => {}
-// }
-export default function PlusButton({ options, navigation }) {
+export default function PlusButton({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const navigateToMateria = () => {
@@ -44,7 +40,7 @@ export default function PlusButton({ options, navigation }) {
         </TouchableWithoutFeedback>
 
         <View style={styles.modalView}>
-          <View styles={styles.optionsList}>
+          <View style={styles.optionsList}>
             <View style={{ gap: 24 }}>
               <Pressable
                 style={{ flexDirection: "row", gap: 4 }}

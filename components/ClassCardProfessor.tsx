@@ -4,7 +4,7 @@ import { View, Pressable, Text, StyleSheet, Switch, Alert } from "react-native";
 
 import { aulasAtom } from "../utils/aulas";
 
-export default function ClassCard({
+export default function ClassCardProfessor({
   title,
   time,
   description,

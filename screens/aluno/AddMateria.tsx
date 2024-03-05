@@ -35,7 +35,7 @@ export default function AddMateria({ navigation }) {
           />
           <FeatherIcon name="search" size={25} />
         </View>
-        <Filtro navigation={navigation} />
+        <Filtro />
       </View>
       <View style={{ marginLeft: "5%", marginTop: "8%" }}>
         <Text style={styles.titleText}>Matérias disponíveis</Text>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
 
   subTitleText: {
     fontSize: 24,
-    fontWeight: "regular",
+    fontWeight: "normal",
   },
 
   searchSection: {

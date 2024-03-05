@@ -1,19 +1,16 @@
 import FeatherIcons from "@expo/vector-icons/Feather";
 import React from "react";
 import {
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  SafeAreaView,
-  ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
 import Modal from "react-native-modal";
 
-export default function Filtro({ options }) {
+export default function Filtro() {
   const [enfase, onChangeEnfase] = React.useState("");
   const [periodo, onChangePeriodo] = React.useState("");
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -35,51 +32,51 @@ export default function Filtro({ options }) {
           }}
         />
       </TouchableOpacity>
-        <Modal
-          isVisible={modalVisible}
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
-          onBackdropPress={toggleModal}
-          propagateSwipe
-        >
-          <KeyboardAvoidingView style={styles.modalView}>
+      <Modal
+        isVisible={modalVisible}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        onBackdropPress={toggleModal}
+        propagateSwipe
+      >
+        <KeyboardAvoidingView style={styles.modalView}>
+          <View>
             <View>
-              <View>
-                <View style={styles.header}>
-                  <Text style={styles.titleText}>Filtros</Text>
-                  <View>
-                    <FeatherIcons
-                      name="x"
-                      size={28}
-                      onPress={() => setModalVisible(!modalVisible)}
-                    />
-                  </View>
-                </View>
+              <View style={styles.header}>
+                <Text style={styles.titleText}>Filtros</Text>
                 <View>
-                  <Text style={styles.baseText}>Ênfases</Text>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={onChangeEnfase}
-                    value={enfase}
-                    placeholder="Insira uma ênfase"
-                  />
-                </View>
-                <View style={{ alignItems: "center" }}>
-                  <Text style={styles.baseText}>ou</Text>
-                </View>
-                <View>
-                  <Text style={styles.baseText}>Período</Text>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={onChangePeriodo}
-                    value={periodo}
-                    placeholder="Insira um período"
+                  <FeatherIcons
+                    name="x"
+                    size={28}
+                    onPress={() => setModalVisible(!modalVisible)}
                   />
                 </View>
               </View>
+              <View>
+                <Text style={styles.baseText}>Ênfases</Text>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={onChangeEnfase}
+                  value={enfase}
+                  placeholder="Insira uma ênfase"
+                />
+              </View>
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.baseText}>ou</Text>
+              </View>
+              <View>
+                <Text style={styles.baseText}>Período</Text>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={onChangePeriodo}
+                  value={periodo}
+                  placeholder="Insira um período"
+                />
+              </View>
             </View>
-          </KeyboardAvoidingView>
-        </Modal>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </>
   );
 }
@@ -96,7 +93,6 @@ const styles = StyleSheet.create({
 
   baseText: {
     fontSize: 18,
-    color: "6B7280",
   },
 
   modalView: {

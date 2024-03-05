@@ -4,17 +4,15 @@ import { useAtom } from "jotai";
 import React from "react";
 import { StyleSheet, Text, SafeAreaView, SectionList } from "react-native";
 
-import Calendar from "../../components/Calendar";
+import ClassCard from "../../components/ClassCard";
 import InfoClass from "../../components/InfoClass";
 import PlusButton from "../../components/PlusButton";
-import ClassCardP from "../../components/classCardP";
 import { aulasAtom } from "../../utils/aulas";
 
 export default function Home({ navigation }) {
   const [aulas] = useAtom(aulasAtom);
-  const [dateFormatView, changeDateFormat] = React.useState("week");
+  const [dateFormatView] = React.useState("week");
 
-  const [modalVisible, setModalVisible] = React.useState(false);
   const [showClass, setShowClass] = React.useState(false);
   const [selectedClassId, setSelectedClassId] = React.useState(null);
 
@@ -25,7 +23,7 @@ export default function Home({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Calendar open={dateFormatView !== "week"} />
+      {/* <Calendar open={dateFormatView !== "week"} /> */}
 
       <SectionList
         sections={[
@@ -35,19 +33,16 @@ export default function Home({ navigation }) {
           },
         ]}
         renderItem={({ item }) => (
-          <ClassCardP
+          <ClassCard
             title={item.title}
             time={item.time}
             description={item.description}
             handleCardPress={() => handleCardPress(item.id)}
             status={item.status}
-            id={item.id}
           />
         )}
-        renderSectionHeader={({ section }) => (
-          <Text style={styles.sectionHeader}>{section.title}</Text>
-        )}
-        keyExtractor={(a) => a.id}
+        renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+        keyExtractor={(a) => String(a.id)}
         style={{ marginHorizontal: 12, height: 280 }}
       />
       <InfoClass
