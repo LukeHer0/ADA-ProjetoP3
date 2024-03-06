@@ -1,18 +1,13 @@
 import { Alert } from "react-native";
 import { create } from "zustand";
 
+import { api } from "../config/api";
 import storage from "../config/storage";
 
 type StateProps = {
   token: string;
-  user: null | {
-    id: number;
-    email: string;
-    is_student: boolean;
-    is_teacher: boolean;
-    is_secretary: boolean;
-  };
-  saveToken: (token: string) => void;
+  user: null | User;
+  login: (data: LoginParams) => Promise<void>;
   logout: () => void;
 };
 
@@ -24,19 +19,45 @@ const defaultStudent = {
   is_secretary: false,
 };
 
+type LoginParams = {
+  email: string;
+  password: string;
+};
+
+type LoginResponse = {
+  refresh: string;
+  access: string;
+  is_student: boolean;
+  is_teacher: boolean;
+  is_secretary: boolean;
+};
+
+type User = {
+  name: string;
+  email: string;
+  student_id: string;
+};
+
 export const useAuthStore = create<StateProps>((set) => ({
   token: "",
   user: null,
-  saveToken: async (token: string) => {
-    try {
-      await storage.save({
-        key: "token",
-        data: token,
-      });
-      set({ token, user: defaultStudent });
-    } catch (e) {
-      Alert.alert("Erro", "Erro ao salvar token.");
-    }
+
+  login: async (data: LoginParams) => {
+    const loginResponse = await api.post<LoginResponse>("/token/", data);
+
+    await storage.save({
+      key: "token",
+      data: loginResponse.data.access,
+    });
+
+    api.defaults.headers.common.Authorization = `Bearer ${loginResponse.data.access}`;
+
+    const profileResponse = await api.get<User>("/me");
+
+    await storage.save({
+      key: "user",
+      data: profileResponse.data,
+    });
   },
   logout: async () => {
     // Remove token from AsyncStorage

@@ -5,7 +5,7 @@ export function Input({
   control,
   name,
   ...props
-}: { control?: Control; name?: string } & TextInputProps) {
+}: { control?: Control<any>; name: string } & TextInputProps) {
   const { field } = useController({
     control,
     defaultValue: "",

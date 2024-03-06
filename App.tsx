@@ -14,13 +14,13 @@ import AddMateria from "./screens/aluno/AddMateria";
 import HomeAluno from "./screens/aluno/Home";
 import ListMateria from "./screens/aluno/ListMaterias";
 import Notifications from "./screens/aluno/Notifications";
-import HomeProfessor from "./screens/professor/Home";
-import { useAuthStore } from "./stores/authStore";
+//import HomeProfessor from "./screens/professor/Home";
+// import { useAuthStore } from "./stores/authStore";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
 
-  const user = useAuthStore((state) => state.user);
+  // const user = useAuthStore((state) => state.user);
 
   return (
     <NavigationContainer>
@@ -61,7 +61,7 @@ export default function App() {
 
         <Stack.Screen
           name="Home"
-          component={user?.is_student ? HomeAluno : HomeProfessor}
+          component={HomeAluno}
           options={({ navigation }) => ({
             title: "Suas atividades",
             headerBackVisible: false,

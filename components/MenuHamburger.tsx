@@ -12,6 +12,7 @@ import Modal from "react-native-modal";
 
 import UserInfo from "./UserInfo";
 import { RootStackParamList } from "../screens";
+import { useAuthStore } from "../stores/authStore";
 
 export default function MenuHamburger() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,6 +46,8 @@ export default function MenuHamburger() {
     setShowUserInfo(true);
   };
 
+  const user = useAuthStore((state) => state.user);
+
   return (
     <>
       <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -76,16 +79,18 @@ export default function MenuHamburger() {
                       width: 80,
 
                       height: 80,
-                      alignItems: "center", // Eixo secundario
-                      justifyContent: "center", // Eixo primario
+                      alignItems: "center",
+                      justifyContent: "center",
                       backgroundColor: "white",
                       borderRadius: 50,
                     }}
                   >
                     <FeatherIcons name="user" size={50} />
                   </View>
-                  <Text style={styles.baseText}>Fulano Beltrano de Tal</Text>
-                  <Text style={styles.baseText}>22111555</Text>
+                  <Text style={styles.baseText}>{user?.name}</Text>
+                  <Text style={styles.baseText}>
+                    {user?.student_id.toUpperCase()}
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -165,14 +170,20 @@ const styles = StyleSheet.create({
   },
 });
 
-function MenuOption({ title, icon, onPress }) {
+type MenuOptionProps = {
+  title: string;
+  icon: string;
+  onPress: () => void;
+};
+
+function MenuOption({ title, icon, onPress }: MenuOptionProps) {
   return (
     <>
       <Pressable
         onPress={onPress}
         style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
       >
-        <FeatherIcons name={icon} size={28} />
+        <FeatherIcons name={icon as any} size={28} />
         <Text>{title}</Text>
       </Pressable>
     </>

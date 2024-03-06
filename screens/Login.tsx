@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -13,12 +13,15 @@ import {
 } from "react-native";
 import { z } from "zod";
 
+import { RootStackParamList } from ".";
 import { Input } from "../components/Input";
-import { api } from "../config/api";
 import { useAuthStore } from "../stores/authStore";
 
 const validationSchema = z.object({
-  email: z.string().email("Insira um e-mail válido."),
+  email: z
+    .string()
+    .email("Insira um e-mail válido.")
+    .min(1, "Insira seu e-mail."),
   password: z
     .string({
       invalid_type_error: "Insira uma senha válida.",
@@ -28,24 +31,18 @@ const validationSchema = z.object({
 
 type FormData = z.infer<typeof validationSchema>;
 
-export default function Login({ navigation }) {
+export default function Login() {
   const { control, handleSubmit, formState } = useForm<FormData>({
     resolver: zodResolver(validationSchema),
   });
 
-  const saveToken = useAuthStore((state) => state.saveToken);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const login = useAuthStore((state) => state.login);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const response = await api.post<{
-        refresh: string;
-        access: string;
-        is_student: boolean;
-        is_teacher: boolean;
-        is_secretary: boolean;
-      }>("/token/", data);
-
-      saveToken(response.data.access);
+      await login(data);
 
       navigation.navigate("Home");
     } catch (e) {

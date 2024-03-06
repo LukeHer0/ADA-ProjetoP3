@@ -4,4 +4,6 @@ export type RootStackParamList = {
   ListMateria: undefined;
   ChangeUserInfo: undefined;
   Login: undefined;
+  EsqueciMinhaSenha: undefined;
+  Registro: undefined;
 };
