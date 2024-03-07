@@ -13,6 +13,7 @@ import {
 import { z } from "zod";
 
 import { Input } from "../components/Input";
+import { useAuthStore } from "../stores/authStore";
 
 const validationSchema = z
   .object({
@@ -37,8 +38,19 @@ export default function Registro() {
     resolver: zodResolver(validationSchema),
   });
 
-  const onSubmit = handleSubmit((data: FormData) => {
-    Alert.alert("Cadastro realizado com sucesso!");
+  const register = useAuthStore((state) => state.register);
+
+  const onSubmit = handleSubmit(async (data: FormData) => {
+    try {
+      await register(data);
+      Alert.alert(
+        "Cadastro realizado com sucesso! Siga as instruções presentes no seu email para confirmação",
+      );
+    } catch {
+      Alert.alert(
+        "Houve um erro no seu cadastro. Entre em contato com o suporte ou tente novamente",
+      );
+    }
   });
 
   return (

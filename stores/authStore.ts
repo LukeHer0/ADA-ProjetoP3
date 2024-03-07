@@ -8,6 +8,7 @@ type StateProps = {
   token: string;
   user: null | User;
   login: (data: LoginParams) => Promise<void>;
+  register: (data: RegisterParams) => Promise<void>;
   logout: () => void;
 };
 
@@ -30,6 +31,13 @@ type LoginResponse = {
   is_student: boolean;
   is_teacher: boolean;
   is_secretary: boolean;
+};
+
+type RegisterParams = {
+  email: string;
+  name: string;
+  password: string;
+  student_id: string;
 };
 
 type User = {
@@ -58,6 +66,9 @@ export const useAuthStore = create<StateProps>((set) => ({
       key: "user",
       data: profileResponse.data,
     });
+  },
+  register: async (data: RegisterParams) => {
+    const registerResponse = await api.post("/student/register/", data);
   },
   logout: async () => {
     // Remove token from AsyncStorage
