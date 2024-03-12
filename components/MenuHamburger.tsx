@@ -89,7 +89,7 @@ export default function MenuHamburger() {
                   </View>
                   <Text style={styles.baseText}>{user?.name}</Text>
                   <Text style={styles.baseText}>
-                    {user?.student_id.toUpperCase()}
+                    {user?.registration_id.toUpperCase()}
                   </Text>
                 </View>
               </TouchableOpacity>

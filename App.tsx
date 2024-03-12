@@ -1,12 +1,22 @@
 import FeatherIcons from "@expo/vector-icons/Feather";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useAtom } from "jotai";
-import React from "react";
-import { View, Pressable, StyleSheet, TouchableOpacity } from "react-native";
+import * as Linking from "expo-linking";
+import * as SplashScreen from "expo-splash-screen";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  View,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 
 import ChangeUserInfo from "./components/ChangeUserInfo";
 import MenuHamburger from "./components/MenuHamburger";
+import { RootStackParamList } from "./screens";
+import ConfirmarConta from "./screens/ConfirmarConta";
+import EmailConfirmacaoEnviado from "./screens/EmailConfirmacaoEnviado";
 import EsqueciMinhaSenha from "./screens/EsqueciMinhaSenha";
 import Login from "./screens/Login";
 import Registro from "./screens/Registro";
@@ -14,18 +24,80 @@ import AddMateria from "./screens/aluno/AddMateria";
 import HomeAluno from "./screens/aluno/Home";
 import ListMateria from "./screens/aluno/ListMaterias";
 import Notifications from "./screens/aluno/Notifications";
+import { useAuthStore } from "./stores/authStore";
 //import HomeProfessor from "./screens/professor/Home";
 // import { useAuthStore } from "./stores/authStore";
 
-export default function App() {
-  const Stack = createNativeStackNavigator();
+type LinkingType = {
+  config: {
+    screens: {
+      [key in keyof Partial<RootStackParamList>]: string;
+    };
+  };
+  prefixes: string[];
+};
 
-  // const user = useAuthStore((state) => state.user);
+const config = {
+  screens: {
+    ConfirmarConta: "confirmar-conta",
+  },
+};
+
+const linking: LinkingType = {
+  prefixes: [Linking.createURL("/")],
+  config,
+};
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  const verifyAuth = useAuthStore((state) => state.verifyAuth);
+
+  const user = useAuthStore((state) => state.user);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await verifyAuth();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setAppIsReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      onReady={onLayoutRootView}
+      linking={linking}
+      fallback={<Text>Loading...</Text>}
+    >
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName={user ? "Home" : "Login"}
         screenOptions={{
           headerTitleStyle: {
             fontSize: 26,
@@ -39,11 +111,32 @@ export default function App() {
           component={Login}
           options={{ headerShown: false }}
         />
+
         <Stack.Screen
           name="Registro"
           component={Registro}
           options={{
             title: "Cadastro",
+            headerTitleAlign: "center",
+            headerShadowVisible: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="EmailConfirmacaoEnviado"
+          component={EmailConfirmacaoEnviado}
+          options={{
+            title: "Email enviado",
+            headerTitleAlign: "center",
+            headerShadowVisible: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="ConfirmarConta"
+          component={ConfirmarConta}
+          options={{
+            title: "Confirmar Conta",
             headerTitleAlign: "center",
             headerShadowVisible: false,
           }}

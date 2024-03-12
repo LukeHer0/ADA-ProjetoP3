@@ -1,16 +1,49 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
+import { useForm } from "react-hook-form";
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   SafeAreaView,
-  Pressable,
   ScrollView,
+  Alert,
 } from "react-native";
+import { z } from "zod";
+
+import { Input } from "../components/Input";
+import { AppButton } from "../components/ui/AppButton";
+import { api } from "../config/api";
+
+const validationSchema = z.object({
+  email: z
+    .string()
+    .email("Insira um e-mail válido.")
+    .min(1, "Insira seu e-mail."),
+});
+
+type FormData = z.infer<typeof validationSchema>;
 
 export default function EsqueciMinhaSenha() {
-  const [email, onChangeEmail] = React.useState("");
+  const { control, formState, handleSubmit } = useForm<FormData>({
+    resolver: zodResolver(validationSchema),
+  });
+
+  const onSubmit = handleSubmit(async (values) => {
+    try {
+      await api.post("/password_reset", {
+        email: values.email.trim().toLowerCase(),
+      });
+
+      Alert.alert(
+        "Email enviado",
+        "Verifique sua caixa de entrada para redefinir sua senha",
+      );
+    } catch (e) {
+      console.log("Erro ao enviar email", e);
+      Alert.alert("Erro ao enviar email", JSON.stringify(e));
+    }
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,19 +57,22 @@ export default function EsqueciMinhaSenha() {
 
           <View>
             <Text style={styles.baseText}>Email</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeEmail}
-              value={email}
+
+            <Input
+              name="email"
+              control={control}
               placeholder="Insira o seu email"
             />
+            {formState.errors.email ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.email?.message}
+              </Text>
+            ) : null}
           </View>
 
-          <View>
-            <Pressable style={styles.buttonStyle} onPress={null}>
-              <Text style={{ fontSize: 16 }}>Recuperar senha</Text>
-            </Pressable>
-          </View>
+          <AppButton loading={formState.isSubmitting} onPress={onSubmit}>
+            Recuperar senha
+          </AppButton>
         </View>
       </ScrollView>
     </SafeAreaView>

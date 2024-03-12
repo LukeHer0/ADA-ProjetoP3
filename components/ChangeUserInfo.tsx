@@ -1,44 +1,105 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
+import { useForm } from "react-hook-form";
 import {
   StyleSheet,
   Text,
-  TextInput,
   View,
   SafeAreaView,
   Pressable,
+  Alert,
 } from "react-native";
+import { z } from "zod";
+
+import { Input } from "./Input";
+import { AppButton } from "./ui/AppButton";
+import { api } from "../config/api";
+import { registerSchema } from "../screens/Registro";
+import { useAuthStore } from "../stores/authStore";
+
+const validationSchema = z.object({
+  name: z.string().min(1, "Insira seu nome."),
+  email: z
+    .string()
+    .email("Insira um e-mail válido.")
+    .min(1, "Insira seu e-mail."),
+
+  registration_id: z.string().min(8, "Insira um número de matrícula válido."),
+});
+
+type FormData = z.infer<typeof validationSchema>;
 
 export default function ChangeUserInfo() {
-  const [nome, setNome] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [id, setID] = React.useState("");
+  const user = useAuthStore((state) => state.user);
+
+  const updateProfile = useAuthStore((state) => state.updateProfile);
+
+  const { control, handleSubmit, formState } = useForm<FormData>({
+    resolver: zodResolver(validationSchema),
+    defaultValues: {
+      name: user?.name,
+      email: user?.email,
+      registration_id: user?.registration_id,
+    },
+  });
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await updateProfile(data);
+      Alert.alert("Sucesso", "Perfil atualizado com sucesso.");
+    } catch {
+      Alert.alert("Erro", "Erro ao atualizar perfil.");
+    }
+  });
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#e5e7eb" }}>
-      <View style={{ backgroundColor: "white", marginTop: "25%" }}>
-        <View style={{ width: "90%", maxWidth: 400 }}>
+    <SafeAreaView style={{ backgroundColor: "white", height: "100%" }}>
+      <View style={{ marginHorizontal: 20 }}>
+        <View style={{}}>
           <Text>Nome</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setNome}
-            value={nome}
+          <Input
+            control={control}
+            name="name"
             placeholder="Insira o seu nome"
           />
+
+          {formState.errors.name ? (
+            <Text style={{ color: "red" }}>
+              {formState.errors.name?.message}
+            </Text>
+          ) : null}
+
           <Text>Email</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="Insira o seu e-mail"
+          <Input
+            control={control}
+            name="email"
+            placeholder="Insira o seu email"
           />
+
+          {formState.errors.email ? (
+            <Text style={{ color: "red" }}>
+              {formState.errors.email?.message}
+            </Text>
+          ) : null}
+
           <Text>N° da Matrícula</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setID}
-            value={id}
-            placeholder="Insira sua matrícula"
+          <Input
+            control={control}
+            name="registration_id"
+            placeholder="Insira o seu nº de matricula"
           />
+
+          {formState.errors.registration_id ? (
+            <Text style={{ color: "red" }}>
+              {formState.errors.registration_id?.message}
+            </Text>
+          ) : null}
         </View>
+
+        <AppButton onPress={onSubmit} loading={formState.isSubmitting}>
+          Salvar alterações
+        </AppButton>
+
         <View
           style={{
             alignItems: "flex-end",
@@ -54,26 +115,3 @@ export default function ChangeUserInfo() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  inputStyle: {
-    alignItems: "center",
-  },
-
-  inputTitle: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    color: "d1d5db",
-  },
-
-  input: {
-    backgroundColor: "#e5e7eb",
-    flexDirection: "row",
-    justifyContent: "center",
-    borderRadius: 4,
-    paddingVertical: 6,
-    marginTop: 10,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-});

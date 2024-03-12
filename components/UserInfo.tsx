@@ -1,10 +1,31 @@
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React from "react";
 import { View, Text, Pressable, Image } from "react-native";
 import Modal from "react-native-modal";
 
-export default function UserInfo({ open, closeModal }) {
-  const navigation = useNavigation();
+import { RootStackParamList } from "../screens";
+import { useAuthStore } from "../stores/authStore";
+
+type UserInfoProps = {
+  open: boolean;
+  closeModal: () => void;
+};
+
+export default function UserInfo({ open, closeModal }: UserInfoProps) {
+  const user = useAuthStore((state) => state.user);
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  if (!user) {
+    return null;
+  }
+
+  const handleChangeUser = () => {
+    closeModal();
+
+    navigation.navigate("ChangeUserInfo");
+  };
+
   return (
     <>
       <Modal onBackdropPress={closeModal} isVisible={open}>
@@ -33,14 +54,21 @@ export default function UserInfo({ open, closeModal }) {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={{ fontWeight: "bold" }}>Nome</Text>
-            <Text>John Doe</Text>
+            <Text>{user.name}</Text>
+          </View>
+
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={{ fontWeight: "bold" }}>Email</Text>
+            <Text>{user.email}</Text>
           </View>
 
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={{ fontWeight: "bold" }}>Matrícula</Text>
-            <Text>22111555</Text>
+            <Text>{user.registration_id}</Text>
           </View>
 
           <Pressable
@@ -53,7 +81,7 @@ export default function UserInfo({ open, closeModal }) {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => navigation.navigate("ChangeUserInfo")}
+            onPress={handleChangeUser}
           >
             <Text>Editar</Text>
           </Pressable>

@@ -6,4 +6,6 @@ export type RootStackParamList = {
   Login: undefined;
   EsqueciMinhaSenha: undefined;
   Registro: undefined;
+  EmailConfirmacaoEnviado: undefined;
+  ConfirmarConta: undefined;
 };

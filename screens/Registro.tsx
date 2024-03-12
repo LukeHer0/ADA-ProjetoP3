@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -12,10 +13,12 @@ import {
 } from "react-native";
 import { z } from "zod";
 
+import { RootStackParamList } from ".";
 import { Input } from "../components/Input";
+import { AppButton } from "../components/ui/AppButton";
 import { useAuthStore } from "../stores/authStore";
 
-const validationSchema = z
+export const registerSchema = z
   .object({
     name: z.string().min(1, "Insira seu nome."),
     email: z
@@ -24,27 +27,36 @@ const validationSchema = z
       .min(1, "Insira seu e-mail."),
     password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres."),
     confirmPassword: z.string(),
-    student_id: z.string().min(8, "Insira um número de matrícula válido."),
+    registration_id: z.string().min(8, "Insira um número de matrícula válido."),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas devem ser iguais.",
     path: ["confirmPassword"],
   });
 
-type FormData = z.infer<typeof validationSchema>;
+type FormData = z.infer<typeof registerSchema>;
 
 export default function Registro() {
   const { formState, handleSubmit, control } = useForm<FormData>({
-    resolver: zodResolver(validationSchema),
+    resolver: zodResolver(registerSchema),
   });
 
   const register = useAuthStore((state) => state.register);
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const onSubmit = handleSubmit(async (data: FormData) => {
     try {
       await register(data);
       Alert.alert(
         "Cadastro realizado com sucesso! Siga as instruções presentes no seu email para confirmação",
+        undefined,
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("Login"),
+          },
+        ],
       );
     } catch {
       Alert.alert(
@@ -64,9 +76,11 @@ export default function Registro() {
               name="name"
               placeholder="Insira o seu nome completo"
             />
-            <Text style={{ color: "red" }}>
-              {formState.errors.name?.message}
-            </Text>
+            {formState.errors.name ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.name?.message}
+              </Text>
+            ) : null}
           </View>
 
           <View>
@@ -76,9 +90,12 @@ export default function Registro() {
               name="email"
               placeholder="Insira o seu email"
             />
-            <Text style={{ color: "red" }}>
-              {formState.errors.email?.message}
-            </Text>
+
+            {formState.errors.email ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.email?.message}
+              </Text>
+            ) : null}
           </View>
 
           <View>
@@ -89,9 +106,11 @@ export default function Registro() {
               placeholder="Insira sua senha"
               control={control}
             />
-            <Text style={{ color: "red" }}>
-              {formState.errors.password?.message}
-            </Text>
+            {formState.errors.password ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.password?.message}
+              </Text>
+            ) : null}
           </View>
 
           <View>
@@ -102,28 +121,30 @@ export default function Registro() {
               control={control}
               placeholder="Confirme sua senha"
             />
-            <Text style={{ color: "red" }}>
-              {formState.errors.confirmPassword?.message}
-            </Text>
+            {formState.errors.confirmPassword ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.confirmPassword?.message}
+              </Text>
+            ) : null}
           </View>
 
           <View>
             <Text style={styles.baseText}>Nº de matrícula</Text>
             <Input
-              name="student_id"
+              name="registration_id"
               control={control}
               placeholder="Insira o seu Nº de matrícula"
             />
-            <Text style={{ color: "red" }}>
-              {formState.errors.student_id?.message}
-            </Text>
+            {formState.errors.registration_id ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.registration_id?.message}
+              </Text>
+            ) : null}
           </View>
 
-          <View>
-            <Pressable style={styles.buttonStyle} onPress={onSubmit}>
-              <Text style={{ fontSize: 16 }}>Cadastrar</Text>
-            </Pressable>
-          </View>
+          <AppButton onPress={onSubmit} loading={formState.isSubmitting}>
+            Cadastrar
+          </AppButton>
         </View>
       </ScrollView>
     </SafeAreaView>

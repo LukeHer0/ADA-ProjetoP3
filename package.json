@@ -4,8 +4,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "eslint ."
   },
@@ -33,7 +33,9 @@
     "react-native-web": "~0.19.6",
     "typescript": "^5.3.0",
     "zod": "^3.22.4",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "expo-linking": "~6.2.2",
+    "expo-splash-screen": "~0.26.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

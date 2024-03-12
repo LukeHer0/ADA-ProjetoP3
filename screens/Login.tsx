@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import * as Linking from "expo-linking";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -15,6 +16,7 @@ import { z } from "zod";
 
 import { RootStackParamList } from ".";
 import { Input } from "../components/Input";
+import { AppButton } from "../components/ui/AppButton";
 import { useAuthStore } from "../stores/authStore";
 
 const validationSchema = z.object({
@@ -57,8 +59,8 @@ export default function Login() {
           <Text style={styles.subTitleText}>Bem-vindo ao</Text>
           <Text style={styles.titleText}>ADA</Text>
         </View>
-        <View style={styles.inputStyle}>
-          <View style={{ width: "90%", maxWidth: 400 }}>
+        <View style={{ marginHorizontal: 20 }}>
+          <View style={{ width: "100%" }}>
             <Text style={styles.baseText}>Email</Text>
             <Input
               name="email"
@@ -66,9 +68,11 @@ export default function Login() {
               style={styles.input}
               placeholder="Insira o seu e-mail institucional"
             />
-            <Text style={{ color: "red" }}>
-              {formState.errors.email?.message}
-            </Text>
+            {formState.errors.email ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.email?.message}
+              </Text>
+            ) : null}
             <Text style={styles.baseText}>Senha</Text>
             <Input
               name="password"
@@ -77,11 +81,13 @@ export default function Login() {
               style={styles.input}
               placeholder="Insira sua senha"
             />
-            <Text style={{ color: "red" }}>
-              {formState.errors.password?.message}
-            </Text>
+            {formState.errors.password ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.password?.message}
+              </Text>
+            ) : null}
           </View>
-          <View style={{ width: "90%", maxWidth: 400 }}>
+          <View style={{ width: "100%" }}>
             <View
               style={{
                 alignItems: "flex-end",
@@ -97,12 +103,10 @@ export default function Login() {
               </Pressable>
             </View>
           </View>
-        </View>
 
-        <View>
-          <Pressable style={styles.buttonStyle} onPress={onSubmit}>
-            <Text style={{ fontSize: 18 }}>Entrar</Text>
-          </Pressable>
+          <AppButton loading={formState.isSubmitting} onPress={onSubmit}>
+            Entrar
+          </AppButton>
         </View>
       </ScrollView>
 
@@ -164,10 +168,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     marginTop: 60,
     marginBottom: 30,
-  },
-
-  inputStyle: {
-    alignItems: "center",
   },
 
   inputTitle: {
