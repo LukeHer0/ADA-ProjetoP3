@@ -18,6 +18,11 @@ export default function PlusButton({ navigation }) {
     navigation.navigate("addMateria");
   };
 
+  const navigateToListStudents = () => {
+    setModalVisible(false);
+    navigation.navigate("Lista de Alunos");
+  };
+
   return (
     <View
       style={{
@@ -44,13 +49,17 @@ export default function PlusButton({ navigation }) {
             <View style={{ gap: 24 }}>
               <Pressable
                 style={{ flexDirection: "row", gap: 4 }}
-                onPress={navigateToMateria}
+                // onPress={navigateToMateria}
+                // TESTING! Lembrar de tirar depois!
+                onPress={navigateToListStudents}
               >
                 <FeatherIcons name="book" size={18} />
                 <Text>Nova Materia</Text>
               </Pressable>
 
-              <Pressable style={{ flexDirection: "row", gap: 4 }}>
+              <Pressable
+                style={{ flexDirection: "row", gap: 4 }}
+              >
                 <FeatherIcons name="edit" size={18} />
                 <Text>Anotação Pessoal</Text>
               </Pressable>

@@ -1,10 +1,12 @@
 import FeatherIcons from "@expo/vector-icons/Feather";
 import { useAtom } from "jotai";
-import React from "react";
-import { View, Text, Pressable } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Pressable, Touchable, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
+import { Picker } from "@react-native-picker/picker";
 
 import { aulasAtom } from "../utils/aulas";
+import { set } from "react-hook-form";
 
 type InfoClassProps = {
   open: boolean;
@@ -12,17 +14,22 @@ type InfoClassProps = {
   classId: number;
 };
 
+
 export default function InfoClass({
   open,
   closeModal,
   classId,
 }: InfoClassProps) {
+  const [opens, setOpen] = useState();
+
   const [aulas] = useAtom(aulasAtom);
   const selectedClass = aulas.find((aula) => aula.id === classId);
-
+  
   if (!selectedClass) return null;
+  
 
   return (
+  
     <Modal onBackdropPress={closeModal} isVisible={open}>
       <View
         style={{
@@ -69,7 +76,26 @@ export default function InfoClass({
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={{ fontWeight: "bold" }}>Local</Text>
-            <Text>{selectedClass.local}</Text>
+            {/* <View> */}
+              <Picker 
+              selectedValue={opens}
+              onValueChange={(itemValue, itemIndex) =>
+                setOpen(itemValue)
+                }
+              mode = "dropdown"
+              numberOfLines={2}
+              style={{backgroundColor: "grey", flexDirection: "row", paddingHorizontal: 10, width: "60%"}}>
+                  <Picker.Item label="Lab 1, IC" value="lab1"/>
+                  <Picker.Item label="Lab 2, IC" value="lab2"/>
+                  <Picker.Item label="Lab 3, IC" value="lab3"/>
+                  <Picker.Item label="Miniauditorio, IC" value="miniaudi"/>
+                  <Picker.Item label="Sala 1, IC" value="sala1"/>
+                  <Picker.Item label="Sala 2, IC" value="sala2"/>
+                  <Picker.Item label="Sala 3, IC" value="sala3"/>
+                  <Picker.Item label="Sala 4, IC" value="sala4"/>
+                  <Picker.Item label="Auditorio, CEPET" value="audicepetec"/>
+              </Picker>
+            {/* </View> */}
           </View>
         </View>
       </View>

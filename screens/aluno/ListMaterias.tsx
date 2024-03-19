@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, SafeAreaView } from "react-native";
 
 import { Materia } from "../../components/Materia";
 import PlusButton from "../../components/PlusButton";
+import CardAluno from "../../components/CardAluno"
 
 const materias = [
   {
@@ -23,6 +24,11 @@ const materias = [
 ];
 
 export default function ListMateria({ navigation }) {
+  const [showClass, setShowClass] = React.useState(false);
+  const handleCardPress = () => {
+    setShowClass(true);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ marginLeft: "5%", marginTop: "8%" }}>
@@ -30,9 +36,13 @@ export default function ListMateria({ navigation }) {
       </View>
       <View style={{ alignItems: "center", marginTop: "5%" }}>
         {materias.map((materia, index) => (
-          <Materia key={index} {...materia} />
+          <Materia key={index} {...materia}
+          handleCardPress = {() => navigation.navigate("Lista de Alunos")} />
         ))}
       </View>
+      <CardAluno
+      open={showClass}
+      closeModal={() => setShowClass(false)}/>
       <PlusButton navigation={navigation} />
     </SafeAreaView>
   );

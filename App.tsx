@@ -25,7 +25,8 @@ import HomeAluno from "./screens/aluno/Home";
 import ListMateria from "./screens/aluno/ListMaterias";
 import Notifications from "./screens/aluno/Notifications";
 import { useAuthStore } from "./stores/authStore";
-//import HomeProfessor from "./screens/professor/Home";
+import HomeProfessor from "./screens/professor/Home";
+import ListStudents from "./screens/professor/ListStudents";
 // import { useAuthStore } from "./stores/authStore";
 
 type LinkingType = {
@@ -97,7 +98,8 @@ export default function App() {
       fallback={<Text>Loading...</Text>}
     >
       <Stack.Navigator
-        initialRouteName={user ? "Home" : "Login"}
+        // initialRouteName={user ? "Home" : "Login"}
+        initialRouteName={"HomeProfessor"}
         screenOptions={{
           headerTitleStyle: {
             fontSize: 26,
@@ -232,6 +234,41 @@ export default function App() {
             headerShadowVisible: false,
           }}
         />
+        <Stack.Screen
+          name="HomeProfessor"
+          component={HomeProfessor}
+          options={({ navigation }) => ({
+            title: "Suas atividades",
+            headerBackVisible: false,
+            headerShadowVisible: false,
+
+            headerRight: () => (
+              <View style={styles.headerIcons}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Notifications")}
+                >
+                  <FeatherIcons name="bell" size={26} />
+                </TouchableOpacity>
+                <MenuHamburger />
+              </View>
+            ),
+          })}
+        />
+
+        <Stack.Screen
+          name="Lista de Alunos"
+          component={ListStudents}
+          options={{
+            title: "Alunos",
+            headerTitleStyle: {
+              fontSize: 22,
+              fontWeight: "bold",
+            },
+            gestureEnabled: true,
+            headerShadowVisible: true,
+          }}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

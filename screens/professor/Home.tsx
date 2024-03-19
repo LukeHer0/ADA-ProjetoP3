@@ -6,6 +6,7 @@ import { StyleSheet, Text, SafeAreaView, SectionList } from "react-native";
 
 import ClassCardProfessor from "../../components/ClassCardProfessor";
 import InfoClass from "../../components/InfoClass";
+import CardAluno from "../../components/CardAluno";
 import PlusButton from "../../components/PlusButton";
 import { aulasAtom } from "../../utils/aulas";
 

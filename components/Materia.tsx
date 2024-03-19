@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 
-export function Materia({ title, teacherName, code }) {
+export function Materia({ title, teacherName, code, handleCardPress }) {
   return (
+    <Pressable onPress={handleCardPress}>
     <View style={styles.materiaStyle}>
       <View>
         <Text style={styles.materiaTitle}>{title}</Text>
@@ -18,6 +19,7 @@ export function Materia({ title, teacherName, code }) {
         {/* <FeatherIcons name="chevron-down" size={30} /> */}
       </View>
     </View>
+    </Pressable> 
   );
 }
 

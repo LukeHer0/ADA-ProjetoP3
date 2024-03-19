@@ -30,4 +30,14 @@ export const aulasAtom = atom([
     status: "canceled",
     local: "Laboratorio 2, IC",
   },
+  {
+    id:4,
+    title: "Teoria da Computação",
+    description: "Apresentação de podcasts",
+    teacherName: "Cuarón",
+    time: "19:00",
+    status: "confirmed",
+    local: "Sala 2, IC"
+
+  }
 ]);
