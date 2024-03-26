@@ -7,7 +7,7 @@ export default function ClassCard({
   description,
   status,
   handleCardPress,
-}) {
+}: any) {
   return (
     <Pressable onPress={handleCardPress}>
       <View

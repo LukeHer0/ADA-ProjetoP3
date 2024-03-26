@@ -1,4 +1,4 @@
-import { isAxiosError } from "axios";
+import { AxiosResponse, isAxiosError } from "axios";
 import { create } from "zustand";
 
 import { api } from "../config/api";
@@ -9,7 +9,7 @@ type StateProps = {
   user: null | User;
   verifyAuth: () => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
-  login: (data: LoginParams) => Promise<void>;
+  login: (data: LoginParams) => Promise<AxiosResponse<LoginResponse, any>>;
   register: (data: RegisterParams) => Promise<void>;
   logout: () => void;
 };
@@ -34,7 +34,6 @@ type LoginResponse = {
   is_teacher: boolean;
   is_secretary: boolean;
 };
-12345;
 
 type RegisterParams = {
   email: string;
@@ -115,6 +114,8 @@ export const useAuthStore = create<StateProps>((set) => ({
     });
 
     set({ token: loginResponse.data.access, user: profileResponse.data });
+
+    return loginResponse;
   },
 
   register: async (data: RegisterParams) => {

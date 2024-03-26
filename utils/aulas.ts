@@ -1,6 +1,3 @@
-import { atom } from "jotai";
-
-/* eslint-disable prefer-const */
 export const aulasAtom = [
   {
     id: 1,
@@ -9,7 +6,7 @@ export const aulasAtom = [
       "Introdução ao React/Next.js: Conceitos iniciais e fundamentais.",
     teacherName: "João",
     time: "19:00",
-    duration: '1h',
+    duration: "1h",
     date: "2024-03-24",
     status: "confirmed",
     local: "Laboratorio 3, IC",
@@ -17,11 +14,10 @@ export const aulasAtom = [
   {
     id: 1,
     title: "Programação 2",
-    description:
-      "java",
+    description: "java",
     teacherName: "javador",
     time: "14:00",
-    duration: '1h',
+    duration: "1h",
     date: "2024-03-24",
     status: "confirmed",
     local: "Laboratorio 3, IC",
@@ -32,7 +28,7 @@ export const aulasAtom = [
     description: "Apresentação da disciplina",
     teacherName: "Afonso",
     time: "19:00",
-    duration: '1h',
+    duration: "1h",
     date: "2024-03-25",
     status: "confirmed",
     local: "Mini Auditório, IC",
@@ -43,21 +39,20 @@ export const aulasAtom = [
     description: "Portas lógicas",
     teacherName: "Glauber",
     time: "19:00",
-    duration: '1h',
+    duration: "1h",
     date: "2024-03-26",
     status: "canceled",
     local: "Laboratorio 2, IC",
   },
   {
-    id:4,
+    id: 4,
     title: "Teoria da Computação",
     description: "Apresentação de podcasts",
     teacherName: "Cuarón",
     time: "19:00",
-    duration: '1h',
+    duration: "1h",
     date: "2024-03-29",
     status: "confirmed",
-    local: "Sala 2, IC"
-
-  }
+    local: "Sala 2, IC",
+  },
 ];

@@ -1,106 +1,139 @@
 /* eslint-disable eqeqeq */
 
-import { useAtom } from "jotai";
 import React, { useState } from "react";
-import { StyleSheet, Text, SafeAreaView, SectionList, View } from "react-native";
-import { TouchableOpacity } from 'react-native';
-import FeatherIcons from "@expo/vector-icons/Feather";
-import ClassCard from "../../components/ClassCard";
-import InfoClass from "../../components/InfoClass";
-import PlusButton from "../../components/PlusButton";
-import { aulasAtom } from "../../utils/aulas";
-import { Calendar, LocaleConfig, ExpandableCalendar, CalendarProvider, AgendaList, Agenda } from 'react-native-calendars';
-import AgendaItem from "../../components/AgendaItems";
+import { StyleSheet, SafeAreaView } from "react-native";
+import {
+  LocaleConfig,
+  ExpandableCalendar,
+  CalendarProvider,
+  AgendaList,
+} from "react-native-calendars";
+import { todayString } from "react-native-calendars/src/expandableCalendar/commons";
 
-LocaleConfig.locales['pt-br'] = {
+import AgendaItem from "../../components/AgendaItems";
+import PlusButton from "../../components/PlusButton";
+import { api } from "../../config/api";
+import { aulasAtom } from "../../utils/aulas";
+
+LocaleConfig.locales["pt-br"] = {
   monthNames: [
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro'
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
   ],
-  monthNamesShort: ['Jan.', 'Fev.', 'Mar.', 'Abr.', 'Mai.', 'Jun.', 'Jul.', 'Ago.', 'Set.', 'Out.', 'Nov.', 'Dez.'],
-  dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-  dayNamesShort: ['Dom.', 'Seg.', 'Ter.', 'Qua.', 'Qui.', 'Sex.', 'Sáb.'],
-  today: "Hoje"
+  monthNamesShort: [
+    "Jan.",
+    "Fev.",
+    "Mar.",
+    "Abr.",
+    "Mai.",
+    "Jun.",
+    "Jul.",
+    "Ago.",
+    "Set.",
+    "Out.",
+    "Nov.",
+    "Dez.",
+  ],
+  dayNames: [
+    "Domingo",
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+  ],
+  dayNamesShort: ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sáb."],
+  today: "Hoje",
 };
-LocaleConfig.defaultLocale = 'pt-br';
+LocaleConfig.defaultLocale = "pt-br";
 
 type courseType = {
-  hour: string,
-  duration: string,
-  title: string,
+  id: number;
+  title: string;
+  description: string;
+  teacherName: string;
+  time: string;
+  duration: string;
+  date: string;
+  status: string;
+  local: string;
 };
 
 type eventsType = {
-  title: string,
-  data: courseType[],
+  title: string;
+  data: courseType[];
 };
 
-const events : eventsType[] = [];
+const list_Subjects = api.get<ListSubjects>("/classroom/subjects/");
 
-aulasAtom.forEach((aula) => events.push(
-  {
-    title: aula.date,
-    data: [
-      {
-        hour: aula.time, duration: aula.duration, title: aula.title
-      }
-    ]
+const events: eventsType[] = [];
+
+aulasAtom.forEach((aula) => {
+  if (events.map((dia) => dia.title === aula.date)) {
+    events.push({
+      title: aula.date,
+      data: [aula],
+    });
   }
-));
+});
+
+type ListSubjects = {
+  count: number;
+  next: null | number;
+  previous: null | number;
+  results: Subjects[];
+};
+
+type Subjects = {
+  name: string;
+  code: string;
+  description: string;
+};
 
 export default function Home({ navigation }: any) {
   const [selected, setSelected] = React.useState("");
 
-  //const [aulas] = useAtom(aulasAtom);
-
-  
-    
-  const [dateFormatView] = React.useState("week");
-
-  const [showClass, setShowClass] = React.useState(false);
-  const [selectedClassId, setSelectedClassId] = React.useState(null);
-
-  const renderItem = React.useCallback(({item}: any) => {
-    return <AgendaItem item={item}/>;
+  const renderItem = React.useCallback(({ item }: any) => {
+    return <AgendaItem item={item} />;
   }, []);
-
-  const handleCardPress = (id: any) => {
-    setSelectedClassId(id);
-    setShowClass(true);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* <Calendar open={dateFormatView !== "week"} /> */}
 
-      <CalendarProvider
-        date={"2024-03-24"}
-      >
+      <CalendarProvider date="">
         <ExpandableCalendar
-          onDayPress={day => {
+          onDayPress={(day) => {
             setSelected(day.dateString);
           }}
           // current = {new Date().toISOString()}
           markedDates={{
-            [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'orange'}
+            [selected]: {
+              selected: true,
+              disableTouchEvent: true,
+              selectedColor: "orange",
+            },
           }}
         />
         <AgendaList
-          sections={events}
+          sections={events.filter(
+            (dia) => new Date(dia.title) >= new Date(selected),
+          )}
           renderItem={renderItem}
         />
       </CalendarProvider>
-      
+
       <PlusButton navigation={navigation} />
     </SafeAreaView>
   );

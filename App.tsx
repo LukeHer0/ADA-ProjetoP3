@@ -24,10 +24,11 @@ import AddMateria from "./screens/aluno/AddMateria";
 import HomeAluno from "./screens/aluno/Home";
 import ListMateria from "./screens/aluno/ListMaterias";
 import Notifications from "./screens/aluno/Notifications";
-import { useAuthStore } from "./stores/authStore";
 import HomeProfessor from "./screens/professor/Home";
 import ListStudents from "./screens/professor/ListStudents";
-// import { useAuthStore } from "./stores/authStore";
+import HomeSecretaria from "./screens/secretaria/Home";
+import { useAuthStore } from "./stores/authStore";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type LinkingType = {
   config: {
@@ -99,7 +100,7 @@ export default function App() {
     >
       <Stack.Navigator
         // initialRouteName={user ? "Home" : "Login"}
-        initialRouteName={"HomeAluno"}
+        initialRouteName={"Login"}
         screenOptions={{
           headerTitleStyle: {
             fontSize: 26,
@@ -170,6 +171,24 @@ export default function App() {
                   <FeatherIcons name="bell" size={26} />
                 </TouchableOpacity>
                 <MenuHamburger />
+              </View>
+            ),
+          })}
+        />
+
+        <Stack.Screen
+          name="HomeSecretaria"
+          component={HomeSecretaria}
+          options={({ navigation }) => ({
+            headerTitle: "Início",
+            headerBackVisible: false,
+            headerShadowVisible: false,
+            headerBackButtonMenuEnabled: true,
+            headerRight: () => (
+              <View style={styles.headerIcons}>
+                <TouchableOpacity onPress={() => {}}>
+                  <FeatherIcons name="menu" size={26} />
+                </TouchableOpacity>
               </View>
             ),
           })}
@@ -268,7 +287,6 @@ export default function App() {
             headerShadowVisible: true,
           }}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

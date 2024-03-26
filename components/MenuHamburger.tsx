@@ -27,7 +27,7 @@ export default function MenuHamburger() {
     {
       title: "Home",
       icon: "home",
-      onPress: () => navigation.navigate("Home"),
+      onPress: toggleModal,
     },
     {
       title: "Matérias",
@@ -181,10 +181,10 @@ function MenuOption({ title, icon, onPress }: MenuOptionProps) {
     <>
       <Pressable
         onPress={onPress}
-        style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
+        style={{ flexDirection: "row", gap: 9, alignItems: "center" }}
       >
         <FeatherIcons name={icon as any} size={28} />
-        <Text>{title}</Text>
+        <Text style={{ fontSize: 16 }}>{title}</Text>
       </Pressable>
     </>
   );

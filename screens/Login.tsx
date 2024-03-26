@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import * as Linking from "expo-linking";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -14,9 +13,9 @@ import {
 } from "react-native";
 import { z } from "zod";
 
-import { RootStackParamList } from ".";
 import { Input } from "../components/Input";
 import { AppButton } from "../components/ui/AppButton";
+import { RootStackParamList } from "../screens";
 import { useAuthStore } from "../stores/authStore";
 
 const validationSchema = z.object({
@@ -44,9 +43,14 @@ export default function Login() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await login(data);
-
-      navigation.navigate("Home");
+      const loginresponse = await login(data);
+      if (loginresponse.data.is_secretary) {
+        navigation.navigate("HomeSecretaria");
+      } else if (loginresponse.data.is_student) {
+        navigation.navigate("HomeAluno");
+      } else if (loginresponse.data.is_student) {
+        navigation.navigate("HomeProfessor");
+      }
     } catch (e) {
       Alert.alert("Erro", "E-mail ou senha inválidos.");
     }
