@@ -99,7 +99,7 @@ export default function App() {
     >
       <Stack.Navigator
         // initialRouteName={user ? "Home" : "Login"}
-        initialRouteName={"HomeProfessor"}
+        initialRouteName={"HomeAluno"}
         screenOptions={{
           headerTitleStyle: {
             fontSize: 26,
@@ -155,7 +155,7 @@ export default function App() {
         />
 
         <Stack.Screen
-          name="Home"
+          name="HomeAluno"
           component={HomeAluno}
           options={({ navigation }) => ({
             title: "Suas atividades",

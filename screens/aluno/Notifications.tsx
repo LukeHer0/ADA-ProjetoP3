@@ -30,8 +30,8 @@ const notificacoes = [
 export default function Notifications({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ alignItems: "center", marginTop: "5%" }}>
-        <View style={{ alignItems: "center", marginTop: "5%", width: "100%" }}>
+      <View style={{ alignItems: "center" }}>
+        <View style={{ marginTop: "5%", width: "100%" }}>
           {notificacoes.map((notif, index) => (
             <Notificacao key={index} {...notif} />
           ))}

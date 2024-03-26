@@ -6,9 +6,11 @@ export function Notificacao({ title, desc }) {
   const [showNotif, setShowNotif] = React.useState(true);
   return showNotif ? (
     <View style={styles.notificStyle}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={{ gap: 12 }}>
         <Text style={styles.materiaTitle}>{title}</Text>
-        <FeatherIcons
+        <Text style={styles.baseText}>{desc}</Text>
+      </View>
+      <FeatherIcons
           name="x"
           size={32}
           style={{ color: "#d5d7db" }}
@@ -16,21 +18,20 @@ export function Notificacao({ title, desc }) {
             setShowNotif(false);
           }}
         />
-      </View>
-      <Text style={styles.baseText}>{desc}</Text>
     </View>
   ) : null;
 }
 
 const styles = StyleSheet.create({
   notificStyle: {
-    flexDirection: "column",
+    flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: 'center',
     borderColor: "#e5e7eb",
     borderWidth: 1,
     width: "100%",
     marginBottom: -0.5,
-    paddingVertical: 15,
+    paddingVertical: 20,
     paddingHorizontal: 20,
   },
   baseText: {

@@ -22,7 +22,7 @@ export default function InfoClass({
 }: InfoClassProps) {
   const [opens, setOpen] = useState();
 
-  const [aulas] = useAtom(aulasAtom);
+  const aulas = useAtom(aulasAtom);
   const selectedClass = aulas.find((aula) => aula.id === classId);
   
   if (!selectedClass) return null;

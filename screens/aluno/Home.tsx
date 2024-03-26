@@ -1,22 +1,80 @@
 /* eslint-disable eqeqeq */
 
 import { useAtom } from "jotai";
-import React from "react";
-import { StyleSheet, Text, SafeAreaView, SectionList } from "react-native";
-
+import React, { useState } from "react";
+import { StyleSheet, Text, SafeAreaView, SectionList, View } from "react-native";
+import { TouchableOpacity } from 'react-native';
+import FeatherIcons from "@expo/vector-icons/Feather";
 import ClassCard from "../../components/ClassCard";
 import InfoClass from "../../components/InfoClass";
 import PlusButton from "../../components/PlusButton";
 import { aulasAtom } from "../../utils/aulas";
+import { Calendar, LocaleConfig, ExpandableCalendar, CalendarProvider, AgendaList, Agenda } from 'react-native-calendars';
+import AgendaItem from "../../components/AgendaItems";
 
-export default function Home({ navigation }) {
-  const [aulas] = useAtom(aulasAtom);
+LocaleConfig.locales['pt-br'] = {
+  monthNames: [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+  ],
+  monthNamesShort: ['Jan.', 'Fev.', 'Mar.', 'Abr.', 'Mai.', 'Jun.', 'Jul.', 'Ago.', 'Set.', 'Out.', 'Nov.', 'Dez.'],
+  dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+  dayNamesShort: ['Dom.', 'Seg.', 'Ter.', 'Qua.', 'Qui.', 'Sex.', 'Sáb.'],
+  today: "Hoje"
+};
+LocaleConfig.defaultLocale = 'pt-br';
+
+type courseType = {
+  hour: string,
+  duration: string,
+  title: string,
+};
+
+type eventsType = {
+  title: string,
+  data: courseType[],
+};
+
+const events : eventsType[] = [];
+
+aulasAtom.forEach((aula) => events.push(
+  {
+    title: aula.date,
+    data: [
+      {
+        hour: aula.time, duration: aula.duration, title: aula.title
+      }
+    ]
+  }
+));
+
+export default function Home({ navigation }: any) {
+  const [selected, setSelected] = React.useState("");
+
+  //const [aulas] = useAtom(aulasAtom);
+
+  
+    
   const [dateFormatView] = React.useState("week");
 
   const [showClass, setShowClass] = React.useState(false);
   const [selectedClassId, setSelectedClassId] = React.useState(null);
 
-  const handleCardPress = (id) => {
+  const renderItem = React.useCallback(({item}: any) => {
+    return <AgendaItem item={item}/>;
+  }, []);
+
+  const handleCardPress = (id: any) => {
     setSelectedClassId(id);
     setShowClass(true);
   };
@@ -25,32 +83,24 @@ export default function Home({ navigation }) {
     <SafeAreaView style={styles.container}>
       {/* <Calendar open={dateFormatView !== "week"} /> */}
 
-      <SectionList
-        sections={[
-          {
-            title: "31/01/24",
-            data: aulas,
-          },
-        ]}
-        renderItem={({ item }) => (
-          <ClassCard
-            title={item.title}
-            time={item.time}
-            description={item.description}
-            handleCardPress={() => handleCardPress(item.id)}
-            status={item.status}
-          />
-        )}
-        renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
-        keyExtractor={(a) => String(a.id)}
-        style={{ marginHorizontal: 12, height: 280 }}
-      />
-      <InfoClass
-        classId={selectedClassId}
-        open={showClass}
-        closeModal={() => setShowClass(false)}
-      />
-
+      <CalendarProvider
+        date={"2024-03-24"}
+      >
+        <ExpandableCalendar
+          onDayPress={day => {
+            setSelected(day.dateString);
+          }}
+          // current = {new Date().toISOString()}
+          markedDates={{
+            [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'orange'}
+          }}
+        />
+        <AgendaList
+          sections={events}
+          renderItem={renderItem}
+        />
+      </CalendarProvider>
+      
       <PlusButton navigation={navigation} />
     </SafeAreaView>
   );

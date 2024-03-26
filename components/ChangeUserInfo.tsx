@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
-  StyleSheet,
   Text,
   View,
   SafeAreaView,
@@ -54,52 +53,62 @@ export default function ChangeUserInfo() {
 
   return (
     <SafeAreaView style={{ backgroundColor: "white", height: "100%" }}>
-      <View style={{ marginHorizontal: 20 }}>
-        <View style={{}}>
-          <Text>Nome</Text>
-          <Input
-            control={control}
-            name="name"
-            placeholder="Insira o seu nome"
-          />
+      <View style={{ paddingHorizontal: 30 }}>
+        <View style={{gap: 20}}>
+          {/* Name View */}
+          <View>
+            <Text>Nome</Text>
+            <Input
+              control={control}
+              name="name"
+              placeholder="Insira o seu nome"
+            />
 
-          {formState.errors.name ? (
-            <Text style={{ color: "red" }}>
-              {formState.errors.name?.message}
-            </Text>
+            {formState.errors.name ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.name?.message}
+              </Text>
           ) : null}
+          </View>
 
-          <Text>Email</Text>
-          <Input
-            control={control}
-            name="email"
-            placeholder="Insira o seu email"
-          />
+          {/* Name View */}
+          <View>
+            <Text>Email</Text>
+            <Input
+              control={control}
+              name="email"
+              placeholder="Insira o seu email"
+            />
 
-          {formState.errors.email ? (
-            <Text style={{ color: "red" }}>
-              {formState.errors.email?.message}
-            </Text>
-          ) : null}
+            {formState.errors.email ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.email?.message}
+              </Text>
+            ) : null}
+          </View>
 
-          <Text>N° da Matrícula</Text>
-          <Input
-            control={control}
-            name="registration_id"
-            placeholder="Insira o seu nº de matricula"
-          />
+          {/* Name View */}
+          <View>
+            <Text>N° da Matrícula</Text>
+            <Input
+              control={control}
+              name="registration_id"
+              placeholder="Insira o seu nº de matricula"
+            />
 
-          {formState.errors.registration_id ? (
-            <Text style={{ color: "red" }}>
-              {formState.errors.registration_id?.message}
-            </Text>
-          ) : null}
+            {formState.errors.registration_id ? (
+              <Text style={{ color: "red" }}>
+                {formState.errors.registration_id?.message}
+              </Text>
+            ) : null}
+          </View>
         </View>
 
-        <AppButton onPress={onSubmit} loading={formState.isSubmitting}>
-          Salvar alterações
-        </AppButton>
-
+        <View style = {{paddingTop: 32}}>
+          <AppButton onPress={onSubmit} loading={formState.isSubmitting}>
+            Salvar alterações
+          </AppButton>
+        </View>
         <View
           style={{
             alignItems: "flex-end",
