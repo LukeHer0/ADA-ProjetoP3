@@ -7,7 +7,6 @@ import {
   Text,
   View,
   SafeAreaView,
-  Pressable,
   ScrollView,
   Alert,
 } from "react-native";

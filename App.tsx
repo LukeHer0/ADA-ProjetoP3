@@ -28,7 +28,6 @@ import HomeProfessor from "./screens/professor/Home";
 import ListStudents from "./screens/professor/ListStudents";
 import HomeSecretaria from "./screens/secretaria/Home";
 import { useAuthStore } from "./stores/authStore";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type LinkingType = {
   config: {

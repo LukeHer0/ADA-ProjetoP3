@@ -7,8 +7,9 @@ import {
   ExpandableCalendar,
   CalendarProvider,
   AgendaList,
+  Calendar,
+  Agenda,
 } from "react-native-calendars";
-import { todayString } from "react-native-calendars/src/expandableCalendar/commons";
 
 import AgendaItem from "../../components/AgendaItems";
 import PlusButton from "../../components/PlusButton";
@@ -75,7 +76,7 @@ type eventsType = {
   data: courseType[];
 };
 
-const list_Subjects = api.get<ListSubjects>("/classroom/subjects/");
+// const list_Subjects = api.get<ListSubjects>("/classroom/subjects/");
 
 const events: eventsType[] = [];
 
@@ -88,21 +89,21 @@ aulasAtom.forEach((aula) => {
   }
 });
 
-type ListSubjects = {
-  count: number;
-  next: null | number;
-  previous: null | number;
-  results: Subjects[];
-};
+// type ListSubjects = {
+//   count: number;
+//   next: null | number;
+//   previous: null | number;
+//   results: Subjects[];
+// };
 
-type Subjects = {
-  name: string;
-  code: string;
-  description: string;
-};
+// type Subjects = {
+//   name: string;
+//   code: string;
+//   description: string;
+// };
 
 export default function Home({ navigation }: any) {
-  const [selected, setSelected] = React.useState("");
+  const [selected, setSelected] = React.useState(new Date().toISOString());
 
   const renderItem = React.useCallback(({ item }: any) => {
     return <AgendaItem item={item} />;
@@ -112,12 +113,12 @@ export default function Home({ navigation }: any) {
     <SafeAreaView style={styles.container}>
       {/* <Calendar open={dateFormatView !== "week"} /> */}
 
-      <CalendarProvider date="">
+      <CalendarProvider date={selected}>
         <ExpandableCalendar
           onDayPress={(day) => {
             setSelected(day.dateString);
           }}
-          // current = {new Date().toISOString()}
+          current={new Date().toISOString()}
           markedDates={{
             [selected]: {
               selected: true,
