@@ -64,12 +64,12 @@ export default function UserInfo({ open, closeModal }: UserInfoProps) {
             <Text>{user.email}</Text>
           </View>
 
-          <View
+          {/* <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={{ fontWeight: "bold" }}>Matrícula</Text>
             <Text>{user.registration_id}</Text>
-          </View>
+          </View> */}
 
           <Pressable
             style={{

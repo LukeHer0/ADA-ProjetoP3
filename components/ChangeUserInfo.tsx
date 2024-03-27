@@ -1,19 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import {
-  Text,
-  View,
-  SafeAreaView,
-  Pressable,
-  Alert,
-} from "react-native";
+import { Text, View, SafeAreaView, Pressable, Alert } from "react-native";
 import { z } from "zod";
 
 import { Input } from "./Input";
 import { AppButton } from "./ui/AppButton";
-import { api } from "../config/api";
-import { registerSchema } from "../screens/Registro";
 import { useAuthStore } from "../stores/authStore";
 
 const validationSchema = z.object({
@@ -38,7 +30,7 @@ export default function ChangeUserInfo() {
     defaultValues: {
       name: user?.name,
       email: user?.email,
-      registration_id: user?.registration_id,
+      //registration_id: user?.registration_id,
     },
   });
 
@@ -54,8 +46,7 @@ export default function ChangeUserInfo() {
   return (
     <SafeAreaView style={{ backgroundColor: "white", height: "100%" }}>
       <View style={{ paddingHorizontal: 30 }}>
-        <View style={{gap: 20}}>
-          {/* Name View */}
+        <View style={{ gap: 20 }}>
           <View>
             <Text>Nome</Text>
             <Input
@@ -68,10 +59,9 @@ export default function ChangeUserInfo() {
               <Text style={{ color: "red" }}>
                 {formState.errors.name?.message}
               </Text>
-          ) : null}
+            ) : null}
           </View>
 
-          {/* Name View */}
           <View>
             <Text>Email</Text>
             <Input
@@ -87,8 +77,7 @@ export default function ChangeUserInfo() {
             ) : null}
           </View>
 
-          {/* Name View */}
-          <View>
+          {/* <View>
             <Text>N° da Matrícula</Text>
             <Input
               control={control}
@@ -101,10 +90,10 @@ export default function ChangeUserInfo() {
                 {formState.errors.registration_id?.message}
               </Text>
             ) : null}
-          </View>
+          </View> */}
         </View>
 
-        <View style = {{paddingTop: 32}}>
+        <View style={{ paddingTop: 32 }}>
           <AppButton onPress={onSubmit} loading={formState.isSubmitting}>
             Salvar alterações
           </AppButton>

@@ -2,7 +2,7 @@ import FeatherIcons from "@expo/vector-icons/Feather";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export function Notificacao({ title , desc }) {
+export function Notificacao({ title, desc }) {
   const [showNotif, setShowNotif] = React.useState(true);
   return showNotif ? (
     <View style={styles.notificStyle}>
@@ -11,13 +11,13 @@ export function Notificacao({ title , desc }) {
         <Text style={styles.baseText}>{desc}</Text>
       </View>
       <FeatherIcons
-          name="x"
-          size={32}
-          style={{ color: "#d5d7db" }}
-          onPress={() => {
-            setShowNotif(false);
-          }}
-        />
+        name="x"
+        size={32}
+        style={{ color: "#d5d7db" }}
+        onPress={() => {
+          setShowNotif(false);
+        }}
+      />
     </View>
   ) : null;
 }
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   notificStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: 'center',
+    alignItems: "center",
     borderColor: "#e5e7eb",
     borderWidth: 1,
     width: "100%",

@@ -1,25 +1,36 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 
-export function Materia({ title, teacherName, code, handleCardPress }) {
+type MateriaProps = {
+  title: string;
+  teacherName: string;
+  code: string;
+  handleCardPress?: () => void;
+};
+
+export function Materia({
+  title,
+  teacherName,
+  code,
+  handleCardPress,
+}: MateriaProps) {
   return (
     <Pressable onPress={handleCardPress}>
-    <View style={styles.materiaStyle}>
-      <View>
-        <Text style={styles.materiaTitle}>{title}</Text>
-        <Text style={styles.baseText}>{teacherName}</Text>
+      <View style={styles.materiaStyle}>
+        <View style={{ width: "80%" }}>
+          <Text style={styles.materiaTitle}>{title}</Text>
+          <Text style={styles.baseText}>{teacherName}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.materiaCode}>{code}</Text>
+          {/* <FeatherIcons name="chevron-down" size={30} /> */}
+        </View>
       </View>
-      <View
-        style={{
-          justifyContent: "center",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <Text style={styles.materiaTitle}>{code}</Text>
-        {/* <FeatherIcons name="chevron-down" size={30} /> */}
-      </View>
-    </View>
-    </Pressable> 
+    </Pressable>
   );
 }
 
@@ -28,7 +39,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#e5e7eb",
-    width: "90%",
+
     borderRadius: 10,
     paddingVertical: 15,
     marginBottom: 10,
@@ -40,6 +51,12 @@ const styles = StyleSheet.create({
   },
   materiaTitle: {
     fontSize: 18,
+    color: "#1f2937",
+    fontWeight: "bold",
+  },
+
+  materiaCode: {
+    fontSize: 14,
     color: "#1f2937",
     fontWeight: "bold",
   },

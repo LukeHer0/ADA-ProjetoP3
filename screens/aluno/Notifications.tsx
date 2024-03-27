@@ -1,16 +1,7 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  SafeAreaView,
-  Pressable,
-} from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 
-import { Materia } from "../../components/Materia";
 import { Notificacao } from "../../components/Notificacao";
-import PlusButton from "../../components/PlusButton";
 
 const notificacoes = [
   {

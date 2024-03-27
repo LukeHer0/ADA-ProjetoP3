@@ -1,18 +1,22 @@
-import 'react-native-reanimated'
-import 'react-native-gesture-handler'
-import FeatherIcons from "@expo/vector-icons/Feather";
-import { NavigationContainer } from "@react-navigation/native";
+import "react-native-reanimated";
+import "react-native-gesture-handler";
 
+import { NavigationContainer } from "@react-navigation/native";
+import {
+  QueryClient,
+  QueryClientProvider,
+  focusManager,
+} from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Text,
-} from "react-native";
+import { AppStateStatus, Platform, Text } from "react-native";
+
+import { useAppState } from "./hooks/useAppState";
+import { useOnlineManager } from "./hooks/useOnlineManager";
+import { StackAppScreens } from "./navigation";
 import { RootStackParamList } from "./screens";
 import { useAuthStore } from "./stores/authStore";
-import { StackAppScreens } from './navigation';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type LinkingType = {
   config: {
@@ -34,18 +38,28 @@ const linking: LinkingType = {
   config,
 };
 
+function onAppStateChange(status: AppStateStatus) {
+  // React Query already supports in web browser refetch on window focus by default
+  if (Platform.OS !== "web") {
+    focusManager.setFocused(status === "active");
+  }
+}
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 2 } },
+});
+
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
-
-
-const queryClient = new QueryClient()
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
 
-  const verifyAuth = useAuthStore((state) => state.verifyAuth);
+  useOnlineManager();
 
- 
+  useAppState(onAppStateChange);
+
+  const verifyAuth = useAuthStore((state) => state.verifyAuth);
 
   useEffect(() => {
     async function prepare() {
@@ -78,18 +92,12 @@ export default function App() {
   }
 
   return (
-   
     <NavigationContainer
       onReady={onLayoutRootView}
       linking={linking}
       fallback={<Text>Loading...</Text>}
-
     >
-      <QueryClientProvider client={queryClient}>
-        <StackAppScreens />
-        </QueryClientProvider>
+      <StackAppScreens />
     </NavigationContainer>
-   
   );
 }
-

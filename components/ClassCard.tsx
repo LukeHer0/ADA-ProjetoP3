@@ -17,7 +17,7 @@ export default function ClassCard({
             : { ...styles.materiaStyle, ...styles.canceled }
         }
       >
-        <View style={{ width: "80%", justifyContent: 'center' }}>
+        <View style={{ width: "80%", justifyContent: "center" }}>
           <Text
             style={
               status === "Confirmada"
@@ -27,7 +27,7 @@ export default function ClassCard({
           >
             {title}
           </Text>
-          {<Text style={styles.baseText}>Prof. {teacher}</Text>}
+          <Text style={styles.baseText}>Prof. {teacher}</Text>
         </View>
         <View
           style={{

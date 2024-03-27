@@ -1,17 +1,17 @@
-import { SafeAreaView, StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 
 type AlunoProps = {
-    name: string;
-    id: string;
-    handleCardPress: ()=>void;
+  name: string;
+  id: string;
+  handleCardPress: () => void;
 };
 
 export function Aluno({ name, id, handleCardPress }: AlunoProps) {
   return (
-    <Pressable onPress={ handleCardPress }>
-      <View style = { styles.card }>
-        <Text style = { styles.text }>{ name }</Text>
-        <Text style = { styles.id }>{  id  }</Text>
+    <Pressable onPress={handleCardPress}>
+      <View style={styles.card}>
+        <Text style={styles.text}>{name}</Text>
+        <Text style={styles.id}>{id}</Text>
       </View>
     </Pressable>
   );

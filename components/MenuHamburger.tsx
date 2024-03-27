@@ -27,7 +27,7 @@ export default function MenuHamburger() {
     {
       title: "Home",
       icon: "home",
-      onPress: toggleModal,
+      onPress: () => navigation.navigate("Home"),
     },
     {
       title: "Matérias",
@@ -88,9 +88,7 @@ export default function MenuHamburger() {
                     <FeatherIcons name="user" size={50} />
                   </View>
                   <Text style={styles.baseText}>{user?.name}</Text>
-                  <Text style={styles.baseText}>
-                    {user?.registration_id}
-                  </Text>
+                  <Text style={styles.baseText}>{user?.registration_id}</Text>
                 </View>
               </TouchableOpacity>
             </View>

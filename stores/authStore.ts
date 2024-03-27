@@ -14,14 +14,6 @@ type StateProps = {
   logout: () => void;
 };
 
-const defaultStudent = {
-  id: 0,
-  email: "",
-  is_student: true,
-  is_teacher: false,
-  is_secretary: false,
-};
-
 type LoginParams = {
   email: string;
   password: string;
@@ -42,12 +34,20 @@ type RegisterParams = {
   registration_id: string;
 };
 
-type User = {
-  name: string;
-  email: string;
-  role: 'student' | 'teacher' | 'secretary';
-  registration_id: string;
-};
+type User =
+  | {
+      name: string;
+      email: string;
+      role: "student";
+      id: number;
+      registration_id: string;
+    }
+  | {
+      name: string;
+      email: string;
+      role: "teacher" | "secretary";
+      id: number;
+    };
 
 export const useAuthStore = create<StateProps>((set) => ({
   token: "",
@@ -61,8 +61,6 @@ export const useAuthStore = create<StateProps>((set) => ({
         api.defaults.headers.common.Authorization = `Bearer ${token}`;
 
         const profileResponse = await api.get<User>("/me");
-
- 
 
         if (!profileResponse.data) {
           return await storage.remove({ key: "token" });
@@ -115,7 +113,6 @@ export const useAuthStore = create<StateProps>((set) => ({
     });
 
     set({ token: loginResponse.data.access, user: profileResponse.data });
-
   },
 
   register: async (data: RegisterParams) => {

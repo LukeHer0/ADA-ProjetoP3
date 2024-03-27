@@ -1,3 +1,4 @@
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useCallback } from "react";
 import {
   StyleSheet,
@@ -5,19 +6,16 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Button,
   Switch,
 } from "react-native";
+
 import { api } from "../config/api";
 import { RootStackParamList } from "../screens";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
 
-
-
-const AgendaItemTeacher = ({props} : any) => {
+const AgendaItemTeacher = ({ props }: any) => {
   const { item } = props;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [isEnabled, setIsEnabled] = React.useState(item.status === "confirmed");
+  const [isEnabled] = React.useState(item.status === "confirmed");
 
   const toggleSwitch = () => {
     createConfirmAlert();
@@ -30,15 +28,17 @@ const AgendaItemTeacher = ({props} : any) => {
       [
         {
           text: "Cancelar",
-          onPress: () => console.log("Cancelado"),
+
           style: "cancel",
         },
         { text: "Confirmar", onPress: changeStatus },
       ],
     );
-  
+
   const changeStatus = () => {
-    api.patch(`/classroom/classrooms/${item.id}/`, {status: ( item.status === "confirmed" ? "confirmed" : "canceled")});
+    api.patch(`/classroom/classrooms/${item.id}/`, {
+      status: item.status === "confirmed" ? "confirmed" : "canceled",
+    });
   };
 
   const itemPressed = useCallback(() => {
@@ -48,8 +48,9 @@ const AgendaItemTeacher = ({props} : any) => {
       [
         {
           text: "Alunos",
-          onPress: () => navigation.navigate("ListaEstudantes", {id: item.id}),
-        }
+          onPress: () =>
+            navigation.navigate("ListaEstudantes", { id: item.id }),
+        },
       ],
     );
   }, []);
@@ -62,13 +63,13 @@ const AgendaItemTeacher = ({props} : any) => {
       </View>
       <Text style={styles.itemTitleText}>{item.title}</Text>
       <View style={styles.itemButtonContainer}>
-      <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-          />
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
       </View>
     </TouchableOpacity>
   );

@@ -1,38 +1,21 @@
-import React from "react";
-import { StyleSheet, Text, View, TextInput, SafeAreaView } from "react-native";
-
-import { Materia } from "../../components/Materia";
-import PlusButton from "../../components/PlusButton";
-import CardAluno from "../../components/CardAluno"
-
-import { useNavigation } from "@react-navigation/native";
-import { useClassrooms } from "../../hooks/classrooms";
-
-
-import { NavigationProp } from "@react-navigation/native";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { MotiView } from "moti";
+import { Skeleton } from "moti/skeleton";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, View, SafeAreaView, ScrollView } from "react-native";
 
 import { RootStackParamList } from "..";
-
-const materias = [
-  {
-    title: "Matemática",
-    teacherName: "Prof. Beltrano",
-    code: "MAT001",
-  },
-  {
-    title: "Matemática",
-    teacherName: "Prof. Beltrano",
-    code: "MAT001",
-  },
-  {
-    title: "Matemática",
-    teacherName: "Prof. Beltrano",
-    code: "MAT001",
-  },
-];
+import CardAluno from "../../components/CardAluno";
+import { Materia } from "../../components/Materia";
+import ModalClass from "../../components/ModalClass";
+import PlusButton from "../../components/PlusButton";
+import { useUserSubjectPeriod } from "../../hooks/classrooms";
+import { CourseType } from "../../utils/types";
 
 export default function ListMateria() {
   const [showClass, setShowClass] = React.useState(false);
+
+  const [classModal, setClassModal] = React.useState<CourseType>();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -40,23 +23,43 @@ export default function ListMateria() {
     setShowClass(true);
   };
 
-
-  const { data: classrooms, isLoading } = useClassrooms()
+  const { data: classrooms, isLoading } = useUserSubjectPeriod();
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ marginLeft: "5%", marginTop: "8%" }}>
-        <Text style={styles.titleText}>Matérias disponíveis</Text>
-      </View>
-      <View style={{ alignItems: "center", marginTop: "5%" }}>
-        {classrooms?.map((c) => (
-          <Materia key={index}  title={c.}
-         />
-        ))}
-      </View>
-      <CardAluno
-      open={showClass}
-      closeModal={() => setShowClass(false)}/>
+      <ScrollView style={{ marginHorizontal: 20, marginTop: 20 }}>
+        {!isLoading &&
+          classrooms?.map((c) => (
+            <Materia
+              key={c.id}
+              title={c.subject.name}
+              teacherName={c.teacher.name}
+              code={c.subject.code}
+              handleCardPress={handleCardPress}
+            />
+          ))}
+
+        {isLoading && (
+          <MotiView
+            transition={{
+              type: "timing",
+            }}
+            style={{
+              marginHorizontal: 10,
+              marginTop: 10,
+              marginBottom: 10,
+              rowGap: 12,
+            }}
+          >
+            <Skeleton colorMode="light" height={80} width="100%" />
+
+            <Skeleton colorMode="light" height={80} width="100%" />
+
+            <Skeleton colorMode="light" height={80} width="100%" />
+          </MotiView>
+        )}
+      </ScrollView>
+      {/* <ModalClass classInfo={}} /> */}
       <PlusButton navigation={navigation} />
     </SafeAreaView>
   );

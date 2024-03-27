@@ -1,50 +1,80 @@
-import FeatherIcon from "@expo/vector-icons/Feather";
+import { MotiView } from "moti";
+import { Skeleton } from "moti/skeleton";
 import React from "react";
-import { StyleSheet, Text, View, TextInput, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  TextInput,
+} from "react-native";
 
 import Filtro from "../../components/Filtro";
 import { Materia } from "../../components/Materia";
+import ModalAddClass from "../../components/ModalAddClass";
+import {
+  useClassrooms,
+  useSubjectPeriodsStudent,
+} from "../../hooks/classrooms";
+import { convertSubjectPeriodTypeToCourseType } from "../../utils/aulas";
+import { CourseAddType, CourseType } from "../../utils/types";
 
-const materias = [
-  {
-    title: "Matemática",
-    teacherName: "Prof. Beltrano",
-    code: "MAT001",
-  },
-  {
-    title: "Matemática",
-    teacherName: "Prof. Beltrano",
-    code: "MAT001",
-  },
-  {
-    title: "Matemática",
-    teacherName: "Prof. Beltrano",
-    code: "MAT001",
-  },
-];
+export default function AddMateria() {
+  const { data: classrooms, isLoading } = useClassrooms();
 
-export default function AddMateria({ navigation }) {
+  const [classModal, setClassModal] = React.useState<CourseAddType>();
+
+  const colorMode = "light";
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputStyle}>
         <View style={styles.searchSection}>
-          <TextInput
-            onChangeText={null}
-            value={null}
-            placeholder="Buscar matéria"
-          />
-          <FeatherIcon name="search" size={25} />
+          <TextInput placeholder="Buscar matéria" />
         </View>
         <Filtro />
       </View>
-      <View style={{ marginLeft: "5%", marginTop: "8%" }}>
+      <View style={{ marginVertical: 16, marginHorizontal: 20 }}>
         <Text style={styles.titleText}>Matérias disponíveis</Text>
       </View>
-      <View style={{ alignItems: "center", marginTop: "5%" }}>
-        {materias.map((materia, index) => (
-          <Materia key={index} {...materia} />
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 20 }}>
+        {classrooms?.map((c) => (
+          <Materia
+            key={c.id}
+            title={c.subject.name}
+            teacherName={c.teacher.name}
+            code={c.subject.code}
+            handleCardPress={() => {
+              setClassModal(convertSubjectPeriodTypeToCourseType(c));
+            }}
+          />
         ))}
-      </View>
+
+        {isLoading && (
+          <MotiView
+            transition={{
+              type: "timing",
+            }}
+            style={{
+              marginHorizontal: 10,
+              marginTop: 10,
+              marginBottom: 10,
+              rowGap: 12,
+            }}
+          >
+            <Skeleton colorMode={colorMode} height={80} width="100%" />
+
+            <Skeleton colorMode={colorMode} height={80} width="100%" />
+
+            <Skeleton colorMode={colorMode} height={80} width="100%" />
+          </MotiView>
+        )}
+        <ModalAddClass
+          classInfo={classModal}
+          closeModal={() => setClassModal(undefined)}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 }

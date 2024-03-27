@@ -1,18 +1,16 @@
-import React, { useRef, ReactNode , ReactElement, useCallback,  } from "react";
+import { MotiView } from "moti";
+import { Skeleton } from "moti/skeleton";
+import React, { ReactElement } from "react";
+import { View, Text } from "react-native";
 import {
   ExpandableCalendar,
   LocaleConfig,
   CalendarProvider,
   AgendaList,
 } from "react-native-calendars";
-
-import { View } from "react-native";
+import { MarkedDates } from "react-native-calendars/src/types";
 
 import { EventsType, CourseType } from "../utils/types";
-
-import { MotiView } from 'moti';
-import { Skeleton } from 'moti/skeleton';
-
 
 LocaleConfig.locales["pt-br"] = {
   monthNames: [
@@ -57,66 +55,76 @@ LocaleConfig.locales["pt-br"] = {
 };
 LocaleConfig.defaultLocale = "pt-br";
 
-
 type AppExpandableCalendarProps = {
-  selected: string,
-  renderItem: ({item} : {item: CourseType}) => ReactElement;
-  onDateChanged: (date: string ) => void;
+  selected: string;
+  renderItem: ({ item }: { item: CourseType }) => ReactElement;
+  onDateChanged: (date: string) => void;
   data: EventsType[];
   loading?: boolean;
-}
+};
 
-export default function AppExpandableCalendar({ selected, renderItem, onDateChanged, data, loading }: AppExpandableCalendarProps) {
+export default function AppExpandableCalendar({
+  selected,
+  renderItem,
+  onDateChanged,
+  data,
+  loading,
+}: AppExpandableCalendarProps) {
+  const colorMode = "light";
 
-  const colorMode = 'light';
+  const markedDates: MarkedDates = data.reduce((acc, day) => {
+    acc[day.title] = {
+      color: "orange",
+      marked: true,
+      dots: [
+        {
+          color: "orange",
+          selectedDotColor: "orange",
+        },
+      ],
+    };
+    return acc;
+  }, {} as MarkedDates);
 
   return (
     <>
-    <CalendarProvider date={selected}  onDateChanged={onDateChanged}>
-      <ExpandableCalendar
-        markedDates={{
-          [selected]: {
-            selected: true,
-            disableTouchEvent: true,
-            selectedColor: "#3b82f6",
-          },
-        }}
-      />
-      { !loading  ? ( <AgendaList
-        sections={data.filter(
-          (day) => new Date(day.title) >= new Date(selected),
-        )}
-        style={{marginHorizontal: 10, marginTop: 10, marginBottom: 10}}
-        renderItem={renderItem}
-
-      /> ) : (
-        <MotiView
-        transition={{
-          type: 'timing',
-        }}
-        style={{marginHorizontal: 10, marginTop: 10, marginBottom: 10}}
-      
-        
+      <CalendarProvider
+        showTodayButton
+        date={selected}
+        onDateChanged={onDateChanged}
       >
-        <Skeleton colorMode={colorMode} height={20}  width={120} />
-        <Spacer height={8} />
-        <Skeleton colorMode={colorMode} height={80}  width={'100%'} />
-        <Spacer height={8} />
-        <Skeleton colorMode={colorMode} height={80}  width={'100%'} />
-        <Spacer height={8} />
-        <Skeleton colorMode={colorMode} height={80}  width={'100%'} />
-      </MotiView>
-      ) }
+        <ExpandableCalendar markedDates={markedDates} />
+        {!loading && (!data || data.length === 0) && (
+          <Text>Sem aulas nesse período</Text>
+        )}
 
+        {!loading ? (
+          <AgendaList
+            sections={data}
+            style={{ marginHorizontal: 10, marginTop: 10, marginBottom: 10 }}
+            renderItem={renderItem}
+          />
+        ) : (
+          <MotiView
+            transition={{
+              type: "timing",
+            }}
+            style={{ marginHorizontal: 10, marginTop: 10, marginBottom: 10 }}
+          >
+            <Skeleton colorMode={colorMode} height={20} width={120} />
+            <Spacer height={8} />
+            <Skeleton colorMode={colorMode} height={80} width="100%" />
+            <Spacer height={8} />
+            <Skeleton colorMode={colorMode} height={80} width="100%" />
+            <Spacer height={8} />
+            <Skeleton colorMode={colorMode} height={80} width="100%" />
+          </MotiView>
+        )}
+      </CalendarProvider>
 
-      
-  </CalendarProvider>
-
-
-  {/* <PlaceholderLoading shape="rect" width={60} height={60}/> */}
+      {/* <PlaceholderLoading shape="rect" width={60} height={60}/> */}
     </>
   );
 }
-
 
 const Spacer = ({ height = 16 }) => <View style={{ height }} />;

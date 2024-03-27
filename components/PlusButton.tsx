@@ -50,12 +50,10 @@ export default function PlusButton({ navigation }: any) {
                 <Text>Nova Materia</Text>
               </Pressable>
 
-              <Pressable
-                style={{ flexDirection: "row", gap: 4 }}
-              >
+              {/* <Pressable style={{ flexDirection: "row", gap: 4 }}>
                 <FeatherIcons name="edit" size={18} />
                 <Text>Anotação Pessoal</Text>
-              </Pressable>
+              </Pressable> */}
             </View>
           </View>
         </View>
@@ -63,7 +61,7 @@ export default function PlusButton({ navigation }: any) {
 
       <TouchableOpacity
         style={{
-          backgroundColor: "black",
+          backgroundColor: "#374151",
           borderRadius: 30,
           height: 60,
           width: 60,

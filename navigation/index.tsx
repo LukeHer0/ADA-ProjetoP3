@@ -1,55 +1,59 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { View, StyleSheet } from "react-native";
 
-import Login from "../screens/Login"
-import Registro from "../screens/Registro";
-import EmailConfirmacaoEnviado from "../screens/EmailConfirmacaoEnviado";
+import ChangeUserInfo from "../components/ChangeUserInfo";
+import MenuHamburger from "../components/MenuHamburger";
+import { queryClient } from "../config/query";
 import ConfirmarConta from "../screens/ConfirmarConta";
+import EmailConfirmacaoEnviado from "../screens/EmailConfirmacaoEnviado";
 import EsqueciMinhaSenha from "../screens/EsqueciMinhaSenha";
-import HomeAluno from "../screens/aluno/Home"
-import HomeProfessor from "../screens/professor/Home"
-import HomeSecretaria from "../screens/secretaria/Home"
-import Notifications from '../screens/aluno/Notifications';
-import AddMateria from '../screens/aluno/AddMateria';
-import ListMateria from '../screens/aluno/ListMaterias';
-import ChangeUserInfo from '../components/ChangeUserInfo';
-import ListEstudantes from '../screens/professor/ListStudents';
-
-import MenuHamburger from '../components/MenuHamburger';
-import FeatherIcons from "@expo/vector-icons/Feather";
-
-
-import { useAuthStore } from '../stores/authStore';
-
-
+import Login from "../screens/Login";
+import Registro from "../screens/Registro";
+import AddMateria from "../screens/aluno/AddMateria";
+import HomeAluno from "../screens/aluno/Home";
+import ListMateria from "../screens/aluno/ListMaterias";
+import Notifications from "../screens/aluno/Notifications";
+import HomeProfessor from "../screens/professor/Home";
+import ListEstudantes from "../screens/professor/ListStudents";
+import HomeSecretaria from "../screens/secretaria/Home";
+import { useAuthStore } from "../stores/authStore";
 
 export const Stack = createNativeStackNavigator();
 
-
 export const StackAppScreens = () => {
+  const user = useAuthStore((state) => state.user);
 
- const user = useAuthStore((state) => state.user);
- 
+  useEffect(() => {
+    if (!user) queryClient.clear();
+  }, []);
+
   return (
-    <Stack.Navigator  initialRouteName={user ? "Home" : "Login"}
-    screenOptions={{
-      headerTitleStyle: {
-        fontSize: 26,
+    <QueryClientProvider client={queryClient}>
+      <Stack.Navigator
+        initialRouteName={user ? "Home" : "Login"}
+        screenOptions={{
+          headerTitleStyle: {
+            fontSize: 26,
 
-        fontWeight: "bold",
-      },
-    }}>
-
-      <Stack.Screen
+            fontWeight: "bold",
+          },
+        }}
+      >
+        <Stack.Screen
           name="Home"
           options={({ navigation }) => ({
-            title: user?.role ==='secretary'? 'Lista de Matérias'  :"Suas atividades",
+            title:
+              user?.role === "secretary"
+                ? "Lista de Matérias"
+                : "Suas atividades",
             headerBackVisible: false,
             headerShadowVisible: false,
 
             headerRight: () => (
               <View style={styles.headerIcons}>
-               {/* {user?.role === 'secretary' ? null : <TouchableOpacity
+                {/* {user?.role === 'secretary' ? null : <TouchableOpacity
                   onPress={() => navigation.navigate("Notifications")}
                 >
                   <FeatherIcons name="bell" size={26} />
@@ -58,10 +62,14 @@ export const StackAppScreens = () => {
               </View>
             ),
           })}
-          component={user?.role === 'student' ? HomeAluno : user?.role === 'secretary' ? HomeSecretaria : HomeProfessor}
-          
+          component={
+            user?.role === "student"
+              ? HomeAluno
+              : user?.role === "secretary"
+                ? HomeSecretaria
+                : HomeProfessor
+          }
         />
-
 
         <Stack.Screen
           name="Notifications"
@@ -99,9 +107,9 @@ export const StackAppScreens = () => {
             headerShadowVisible: false,
             headerRight: () => (
               <View style={styles.headerIcons}>
-                <Pressable>
-                  <FeatherIcons name="bell" size={28} />
-                </Pressable>
+                {/* <Pressable>
+                <FeatherIcons name="bell" size={28} />
+              </Pressable> */}
                 <MenuHamburger />
                 {/* <Pressable>
                   <FeatherIcons name="menu" size={28} />
@@ -123,7 +131,6 @@ export const StackAppScreens = () => {
             headerShadowVisible: false,
           }}
         />
-       
 
         <Stack.Screen
           name="ListaEstudantes"
@@ -138,55 +145,55 @@ export const StackAppScreens = () => {
             headerShadowVisible: true,
           }}
         />
-    <Stack.Screen
-    name="Login"
-    component={Login}
-    options={{ headerShown: false }}
-  />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
 
-  <Stack.Screen
-    name="Registro"
-    component={Registro}
-    options={{
-      title: "Cadastro",
-      headerTitleAlign: "center",
-      headerShadowVisible: false,
-    }}
-  />
+        <Stack.Screen
+          name="Registro"
+          component={Registro}
+          options={{
+            title: "Cadastro",
+            headerTitleAlign: "center",
+            headerShadowVisible: false,
+          }}
+        />
 
-  <Stack.Screen
-    name="EmailConfirmacaoEnviado"
-    component={EmailConfirmacaoEnviado}
-    options={{
-      title: "Email enviado",
-      headerTitleAlign: "center",
-      headerShadowVisible: false,
-    }}
-  />
+        <Stack.Screen
+          name="EmailConfirmacaoEnviado"
+          component={EmailConfirmacaoEnviado}
+          options={{
+            title: "Email enviado",
+            headerTitleAlign: "center",
+            headerShadowVisible: false,
+          }}
+        />
 
-  <Stack.Screen
-    name="ConfirmarConta"
-    component={ConfirmarConta}
-    options={{
-      title: "Confirmar Conta",
-      headerTitleAlign: "center",
-      headerShadowVisible: false,
-    }}
-  />
-  <Stack.Screen
-    name="EsqueciMinhaSenha"
-    component={EsqueciMinhaSenha}
-    options={{
-      title: "Esqueci minha senha",
-      headerTitleAlign: "center",
+        <Stack.Screen
+          name="ConfirmarConta"
+          component={ConfirmarConta}
+          options={{
+            title: "Confirmar Conta",
+            headerTitleAlign: "center",
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="EsqueciMinhaSenha"
+          component={EsqueciMinhaSenha}
+          options={{
+            title: "Esqueci minha senha",
+            headerTitleAlign: "center",
 
-      headerShadowVisible: false,
-    }}
-  />
-  </Stack.Navigator>
-  )
-}
-
+            headerShadowVisible: false,
+          }}
+        />
+      </Stack.Navigator>
+    </QueryClientProvider>
+  );
+};
 
 const styles = StyleSheet.create({
   headerIcons: {

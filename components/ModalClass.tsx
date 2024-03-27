@@ -1,8 +1,8 @@
 import FeatherIcons from "@expo/vector-icons/Feather";
-import { useAtom } from "jotai";
 import React from "react";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
+
 import { CourseType } from "../utils/types";
 
 type InfoClassProps = {
@@ -10,10 +10,7 @@ type InfoClassProps = {
   closeModal: () => void;
 };
 
-export default function ModalClass({
-  classInfo,
-  closeModal
-}: InfoClassProps) {
+export default function ModalClass({ classInfo, closeModal }: InfoClassProps) {
   return (
     <Modal onBackdropPress={closeModal} isVisible={!!classInfo}>
       <View
@@ -21,21 +18,25 @@ export default function ModalClass({
           backgroundColor: "white",
           borderRadius: 7,
           padding: 24,
-          flexDirection: "column"
+          flexDirection: "column",
         }}
       >
-        
-        <View style={{
+        <View
+          style={{
             flexDirection: "row",
-            justifyContent: "space-between"
-        }}>
-          <Text style=
-          {{
-            fontSize: 22,
-            fontWeight: "bold"
-          }}>{classInfo?.title}</Text>
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              fontWeight: "bold",
+            }}
+          >
+            {classInfo?.title}
+          </Text>
           <Pressable onPress={closeModal}>
-                  <FeatherIcons name="x" size={24} />
+            <FeatherIcons name="x" size={24} />
           </Pressable>
         </View>
         <View style={{ gap: 20, marginTop: 10 }}>
@@ -44,7 +45,7 @@ export default function ModalClass({
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={{ fontWeight: "bold" }}>Status</Text>
-            <Text>John Doe</Text>
+            <Text>{classInfo?.status}</Text>
           </View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -59,12 +60,28 @@ export default function ModalClass({
             <Text>{classInfo?.local}</Text>
           </View>
         </View>
-        <View style={{marginTop: 40, flexDirection: "row", justifyContent: "center"}}>
-            <TouchableOpacity onPress={closeModal}>
-                <View style={{justifyContent: "center", alignItems: "center", paddingHorizontal: 30, paddingVertical: 10, borderColor: "#e5e7eb", borderWidth: 2, borderRadius: 10}}>
-                    <Text>Fechar</Text>
-                </View>
-            </TouchableOpacity>
+        <View
+          style={{
+            marginTop: 40,
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <TouchableOpacity onPress={closeModal}>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                paddingHorizontal: 30,
+                paddingVertical: 10,
+                borderColor: "#e5e7eb",
+                borderWidth: 2,
+                borderRadius: 10,
+              }}
+            >
+              <Text>Fechar</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>

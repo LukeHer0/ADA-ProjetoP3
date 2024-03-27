@@ -1,37 +1,30 @@
 import React, { useCallback } from "react";
-import {
-  StyleSheet,
-  Alert,
-  View,
-  Text,
-  TouchableOpacity,
-  Button,
-} from "react-native";
+import { StyleSheet, Alert, TouchableOpacity } from "react-native";
 
-type courseType = {
-  id: number;
-  title: string;
-  description: string;
-  teacherName: string;
-  time: string;
-  duration: string;
-  date: string;
-  status: string;
-  local: string;
-};
+// type courseType = {
+//   id: number;
+//   title: string;
+//   description: string;
+//   teacherName: string;
+//   time: string;
+//   duration: string;
+//   date: string;
+//   status: string;
+//   local: string;
+// };
 
 const AgendaItem = (props: any) => {
   const { item } = props;
 
-  const buttonPressed = useCallback(() => {
-    Alert.alert("Aula Info", "Cancelada", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      { text: "OK" },
-    ]);
-  }, []);
+  // const buttonPressed = useCallback(() => {
+  //   Alert.alert("Aula Info", "Cancelada", [
+  //     {
+  //       text: "Cancel",
+  //       style: "cancel",
+  //     },
+  //     { text: "OK" },
+  //   ]);
+  // }, []);
 
   const itemPressed = useCallback(() => {
     Alert.alert(
@@ -42,7 +35,7 @@ const AgendaItem = (props: any) => {
 
   return (
     <TouchableOpacity onPress={itemPressed} style={styles.item}>
-     teste
+      loading
     </TouchableOpacity>
   );
 };

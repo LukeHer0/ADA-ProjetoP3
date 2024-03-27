@@ -1,8 +1,19 @@
-import { useAtom } from "jotai";
+import { MotiView } from "moti";
+import { Skeleton } from "moti/skeleton";
 import React from "react";
 import { View, Pressable, Text, StyleSheet, Switch, Alert } from "react-native";
 
-import { aulasAtom } from "../utils/aulas";
+import { api } from "../config/api";
+
+type ClassCardProfessorProps = {
+  title: string;
+  time: string;
+  description: string;
+  status: string;
+  handleCardPress: () => void;
+  onUpdated: (id: number, status: "Confirmada" | "Cancelada") => void;
+  id: number;
+};
 
 export default function ClassCardProfessor({
   title,
@@ -10,10 +21,10 @@ export default function ClassCardProfessor({
   description,
   status,
   handleCardPress,
+  onUpdated,
   id,
-}) {
-  const [isEnabled, setIsEnabled] = React.useState(status === "confirmed");
-  const [aulas, setAulas] = useAtom(aulasAtom);
+}: ClassCardProfessorProps) {
+  const [loading, setLoading] = React.useState(false);
 
   const createConfirmAlert = () =>
     Alert.alert(
@@ -22,44 +33,62 @@ export default function ClassCardProfessor({
       [
         {
           text: "Cancelar",
-          onPress: () => console.log("Cancelado"),
+
           style: "cancel",
         },
-        { text: "Confirmar", onPress: changeClass },
+        { text: "Confirmar", onPress: () => updateClassStatus() },
       ],
     );
+
+  const updateClassStatus = async () => {
+    setLoading(true);
+    const newStatus = status === "Confirmada" ? "canceled" : "confirmed";
+
+    try {
+      await api.patch(`/classroom/classrooms/${id}/`, {
+        status: newStatus,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    onUpdated(id, newStatus === "confirmed" ? "Confirmada" : "Cancelada");
+    setLoading(false);
+  };
 
   const toggleSwitch = () => {
     createConfirmAlert();
   };
 
-  function changeClass() {
-    setIsEnabled((previousState) => {
-      setAulas(
-        aulas.map((aula) => {
-          if (aula.id === id) {
-            aula.status = !previousState ? "confirmed" : "canceled";
-          }
-          return aula;
-        }),
-      );
-      return !previousState;
-    });
-  }
+  console.log("status", status);
+  const isEnabled = status !== "Cancelada";
+
+  const containerStyle = {
+    ...styles.materiaStyle,
+    ...(status === "Cancelada" ? styles.canceled : {}),
+  };
+
+  if (loading)
+    return (
+      <MotiView
+        transition={{
+          type: "timing",
+        }}
+        style={{
+          marginBottom: 10,
+        }}
+      >
+        <Skeleton colorMode="light" height={90} width="100%" />
+      </MotiView>
+    );
 
   return (
     <Pressable onPress={handleCardPress}>
-      <View
-        style={
-          status === "confirmed"
-            ? styles.materiaStyle
-            : { ...styles.materiaStyle, ...styles.canceled }
-        }
-      >
+      <View style={containerStyle}>
         <View style={{ width: "80%" }}>
           <Text
             style={
-              status === "confirmed"
+              isEnabled
                 ? styles.materiaTitle
                 : { ...styles.materiaTitle, textDecorationLine: "line-through" }
             }
@@ -79,7 +108,7 @@ export default function ClassCardProfessor({
         >
           <Switch
             trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+            thumbColor={isEnabled ? "#1e3a8a" : "#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleSwitch}
             value={isEnabled}
@@ -95,8 +124,8 @@ const styles = StyleSheet.create({
   materiaStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "#e5e7eb",
-
+    backgroundColor: "#bfdbfe",
+    alignItems: "center",
     borderRadius: 10,
     paddingVertical: 15,
     marginBottom: 10,
