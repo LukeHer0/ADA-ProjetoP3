@@ -49,11 +49,11 @@ export const StackAppScreens = () => {
 
             headerRight: () => (
               <View style={styles.headerIcons}>
-               {user?.role === 'secretary' ? null : <TouchableOpacity
+               {/* {user?.role === 'secretary' ? null : <TouchableOpacity
                   onPress={() => navigation.navigate("Notifications")}
                 >
                   <FeatherIcons name="bell" size={26} />
-                </TouchableOpacity>}
+                </TouchableOpacity>} */}
                 <MenuHamburger />
               </View>
             ),

@@ -9,13 +9,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   Text,
 } from "react-native";
-
 import { RootStackParamList } from "./screens";
-
-
 import { useAuthStore } from "./stores/authStore";
-
 import { StackAppScreens } from './navigation';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type LinkingType = {
   config: {
@@ -41,6 +38,7 @@ const linking: LinkingType = {
 SplashScreen.preventAutoHideAsync();
 
 
+const queryClient = new QueryClient()
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -85,9 +83,11 @@ export default function App() {
       onReady={onLayoutRootView}
       linking={linking}
       fallback={<Text>Loading...</Text>}
-      
+
     >
+      <QueryClientProvider client={queryClient}>
         <StackAppScreens />
+        </QueryClientProvider>
     </NavigationContainer>
    
   );

@@ -1,3 +1,5 @@
+import {UserClassroom, CourseType, EventsType} from './types'
+
 export const aulasAtom = [
   {
     id: 1,
@@ -56,3 +58,36 @@ export const aulasAtom = [
     local: "Sala 2, IC",
   },
 ];
+
+
+export function convertToCourseType(userClassroom: UserClassroom): CourseType {
+  return {
+      id: userClassroom.id,
+      title: userClassroom.subject_period_weekday.subject_period.subject.name,
+      description: userClassroom.subject_period_weekday.subject_period.subject.description,
+      teacherName: userClassroom.subject_period_weekday.subject_period.teacher.name, // Insira o nome do professor conforme necessário
+      time: `${userClassroom.start_time} - ${userClassroom.end_time}`,
+      duration: '', // Insira a duração conforme necessário
+      date: userClassroom.date,
+      status: userClassroom.status.label,
+      local: userClassroom.room?.name // Insira o local conforme necessário
+  };
+}
+
+
+export function groupByDate(userClassrooms: (UserClassroom)[]): EventsType[] {
+  const groupedEvents: { [date: string]: CourseType[] } = {};
+
+  userClassrooms.forEach(userClassroom => {
+      const courseType = convertToCourseType(userClassroom);
+      if (!groupedEvents[userClassroom.date]) {
+          groupedEvents[userClassroom.date] = [];
+      }
+      groupedEvents[userClassroom.date].push(courseType);
+  });
+
+  return Object.keys(groupedEvents).map(date => ({
+      title: date,
+      data: groupedEvents[date]
+  }));
+}

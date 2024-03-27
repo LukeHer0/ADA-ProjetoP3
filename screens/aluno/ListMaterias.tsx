@@ -5,6 +5,14 @@ import { Materia } from "../../components/Materia";
 import PlusButton from "../../components/PlusButton";
 import CardAluno from "../../components/CardAluno"
 
+import { useNavigation } from "@react-navigation/native";
+import { useClassrooms } from "../../hooks/classrooms";
+
+
+import { NavigationProp } from "@react-navigation/native";
+
+import { RootStackParamList } from "..";
+
 const materias = [
   {
     title: "Matemática",
@@ -23,11 +31,17 @@ const materias = [
   },
 ];
 
-export default function ListMateria({ navigation }) {
+export default function ListMateria() {
   const [showClass, setShowClass] = React.useState(false);
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const handleCardPress = () => {
     setShowClass(true);
   };
+
+
+  const { data: classrooms, isLoading } = useClassrooms()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -35,9 +49,9 @@ export default function ListMateria({ navigation }) {
         <Text style={styles.titleText}>Matérias disponíveis</Text>
       </View>
       <View style={{ alignItems: "center", marginTop: "5%" }}>
-        {materias.map((materia, index) => (
-          <Materia key={index} {...materia}
-          handleCardPress = {() => navigation.navigate("Lista de Alunos")} />
+        {classrooms?.map((c) => (
+          <Materia key={index}  title={c.}
+         />
         ))}
       </View>
       <CardAluno

@@ -2,7 +2,7 @@ import FeatherIcons from "@expo/vector-icons/Feather";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export function Notificacao({ title, desc }) {
+export function Notificacao({ title , desc }) {
   const [showNotif, setShowNotif] = React.useState(true);
   return showNotif ? (
     <View style={styles.notificStyle}>

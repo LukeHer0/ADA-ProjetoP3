@@ -1,5 +1,5 @@
 import FeatherIcons from "@expo/vector-icons/Feather";
-import React from "react";
+import React, {useState} from "react";
 import {
   StyleSheet,
   Text,
@@ -9,11 +9,13 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import Modal from "react-native-modal";
+import { Picker } from "@react-native-picker/picker";
 
 export default function Filtro() {
   const [enfase, onChangeEnfase] = React.useState("");
   const [periodo, onChangePeriodo] = React.useState("");
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [opens, setOpen] = useState();
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -53,13 +55,17 @@ export default function Filtro() {
                 </View>
               </View>
               <View>
-                <Text style={styles.baseText}>Ênfases</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={onChangeEnfase}
-                  value={enfase}
-                  placeholder="Insira uma ênfase"
-                />
+                <Text style={styles.baseText}>Professor</Text>
+                <Picker 
+              selectedValue={opens}
+              onValueChange={(itemValue, itemIndex) =>
+                setOpen(itemValue)
+                }
+              mode = "dropdown"
+              numberOfLines={2}
+              style={{backgroundColor: "grey", flexDirection: "row", paddingHorizontal: 10, width: "60%"}}>
+                  <Picker.Item label="Lucas Professor" value="lucas"/>
+              </Picker>
               </View>
               <View style={{ alignItems: "center" }}>
                 <Text style={styles.baseText}>ou</Text>

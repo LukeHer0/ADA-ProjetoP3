@@ -16,51 +16,19 @@ import { MotiView } from 'moti';
 
 import { useQuery } from '@tanstack/react-query';
 
-
-
 import AppExpandableCalendar from "../../components/AppExpandableCalendar";
 
+import { convertToCourseType } from '../../utils/aulas'
 
-function convertToCourseType(userClassroom: UserClassroom): CourseType {
-  return {
-      id: userClassroom.id,
-      title: userClassroom.subject_period_weekday.subject_period.subject.name,
-      description: userClassroom.subject_period_weekday.subject_period.subject.description,
-      teacherName: userClassroom.subject_period_weekday.subject_period.teacher.name, // Insira o nome do professor conforme necessário
-      time: `${userClassroom.start_time} - ${userClassroom.end_time}`,
-      duration: '', // Insira a duração conforme necessário
-      date: userClassroom.date,
-      status: userClassroom.status.label,
-      local: userClassroom.room?.name // Insira o local conforme necessário
-  };
-}
-
-// Função para agrupar por data
-function groupByDate(userClassrooms: (UserClassroom)[]): EventsType[] {
-  const groupedEvents: { [date: string]: CourseType[] } = {};
-
-  userClassrooms.forEach(userClassroom => {
-      const courseType = convertToCourseType(userClassroom);
-      if (!groupedEvents[userClassroom.date]) {
-          groupedEvents[userClassroom.date] = [];
-      }
-      groupedEvents[userClassroom.date].push(courseType);
-  });
-
-  return Object.keys(groupedEvents).map(date => ({
-      title: date,
-      data: groupedEvents[date]
-  }));
-}
-
+import { useClassroomsFromUser } from "../../hooks/classrooms";
 
 export default function Home({ navigation }: any) {
   const [selected, setSelected] = React.useState(new Date().toISOString());
-  const [loading, setLoading] = React.useState(true);
- 
-  const [events, setEvents] = React.useState<EventsType[]>([]);
   
   const [classModal, setClassModal] = React.useState<CourseType>();
+
+
+  const { data: events, isLoading } = useClassroomsFromUser(selected)
 
   const renderItem = React.useCallback(({ item }: {item: CourseType}) => {
     const time = item.time.split(' - ');
@@ -70,47 +38,9 @@ export default function Home({ navigation }: any) {
       console.log(item)}}/>
   }, []);
 
-  
-  useEffect(() => {
-    const date = new Date(selected);
-
-
-    const getAulas = async () => {
-
-      setLoading(true);
-      
-      try {
-        const listSubjects = await api.get<UserClassroomResponse>(`/classroom/user-classrooms/`, {
-          params: {
-            start_date: selected,
-            // Add 3 days to selected date
-            end_date: new Date(date.setDate(date.getDate() + 3)).toISOString().split("T")[0],
-          }
-        });
-      // Group aulasAtom grouping by date
-        const data = groupByDate(listSubjects.data.results);
-        console.log(data);
-        setEvents(data);
-      } catch(err) {
-        console.log(err)
-      }
-
-      setLoading(false);
-    }
-
-    getAulas();
-    
-  }, [selected])
-
-
-  
-   const colorMode = 'light' as 'light' | 'dark';
-
-  const dark = colorMode === 'dark';
-
   return (
     <SafeAreaView style={styles.container}>
-     <AppExpandableCalendar renderItem={renderItem} data={events} selected={selected} onDateChanged={setSelected} loading={loading} />
+     <AppExpandableCalendar renderItem={renderItem} data={events || []} selected={selected} onDateChanged={setSelected} loading={isLoading} />
       
       {/* gera varios placeholder de loading */}
       
@@ -123,30 +53,9 @@ export default function Home({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  baseText: {
-    fontSize: 18,
-    fontFamily: "sans-serif",
-    color: "#1f2937",
-  },
-
-  headerStyle: {
-    gap: 12,
-    marginTop: 40,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
   container: {
     flex: 1,
     backgroundColor: "white",
-    height: "100%",
-  },
-
-  gapContainer: {
-    gap: 12,
-    maxWidth: "90%",
-    marginLeft: "5%",
     height: "100%",
   },
 });
