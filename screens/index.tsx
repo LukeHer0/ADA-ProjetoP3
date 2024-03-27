@@ -1,8 +1,6 @@
 export type RootStackParamList = {
   Profile: undefined;
-  HomeAluno: undefined;
-  HomeProfessor: undefined;
-  HomeSecretaria: undefined;
+  Home: undefined;
   ListMateria: undefined;
   ChangeUserInfo: undefined;
   Login: undefined;
@@ -10,4 +8,5 @@ export type RootStackParamList = {
   Registro: undefined;
   EmailConfirmacaoEnviado: undefined;
   ConfirmarConta: undefined;
+  ListaEstudantes: any;
 };

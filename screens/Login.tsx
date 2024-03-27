@@ -44,13 +44,7 @@ export default function Login() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const loginresponse = await login(data);
-      if (loginresponse.data.is_secretary) {
-        navigation.navigate("HomeSecretaria");
-      } else if (loginresponse.data.is_student) {
-        navigation.navigate("HomeAluno");
-      } else if (loginresponse.data.is_student) {
-        navigation.navigate("HomeProfessor");
-      }
+      navigation.navigate("Home");
     } catch (e) {
       Alert.alert("Erro", "E-mail ou senha inválidos.");
     }

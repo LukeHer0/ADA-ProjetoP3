@@ -1,67 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, ScrollView } from "react-native";
 
 import { Aluno } from "../../components/alunoComponent";
 import CardAluno from "../../components/CardAluno";
-
-const alunos = 
-[
-    {
-        nome: "João Silva",
-        id: "202111478"
-    },
-    {
-        nome: "Jouzeh Mathews",
-        id: "202111479"
-    },
-    {
-        nome: "Cleiton do Pneu",
-        id: "202111480"
-    },
-    {
-        nome: "Cabeludo Rei da M4A1",
-        id: "666"
-    },
-    {
-        nome: "Ruan Tenorio apelaozin",
-        id: "202111484"
-    },
-    {
-        nome: "Linda Santos",
-        id: "202111481"
-    },
-    {
-        nome: "Matheus Santos",
-        id: "202111482"
-    },
-    {
-        nome: "Matheus Silva 🌹💖",
-        id: "s2"
-    },
-    {
-        nome: "Vinícius da Costa Neitzke",
-        id: "00000001"
-    },
-];
+import { SubjectPeriodStudentsResponse, SubjectPeriodStudents } from "../../utils/types";
+import { api } from "../../config/api";
 
 
-export default function ListStudents({ navigation }: any) {
+
+
+export default function ListStudents({ id }: any) {
     const [showClass, setShowClass] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
+    const [listStudents, setListStudents] = React.useState<SubjectPeriodStudentsResponse>();
+
+    useEffect(() => {
+        const getStudents = async () => {
+
+            setLoading(true);
+
+            try {
+                setListStudents((await api.get<SubjectPeriodStudentsResponse>(`/classroom/subject-period-students/${id}/students/`)).data);
+            } catch(err) {
+                console.log(err)
+            }
+
+            setLoading(false);
+        }
+    
+        getStudents();
+      }, []);
+
     const handleCardPress = () => {
         setShowClass(true);
     };
+
+
     return (
         <ScrollView>
             <View>
                 <View>
-                    {alunos.map((aluno) => (<Aluno name={aluno.nome} id={aluno.id} handleCardPress = {() => handleCardPress()} /> ))}
+                    {listStudents?.results.map((StudentObject: SubjectPeriodStudents)  => (<Aluno name={StudentObject.student.name} id={StudentObject.student.registration_id} handleCardPress={() => null} /> ))}
                 </View>
                 <CardAluno
                     open={showClass}
                     closeModal={() => setShowClass(false)}
                 />
             </View>
-            
         </ScrollView>
     );
 }

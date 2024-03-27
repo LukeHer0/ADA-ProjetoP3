@@ -10,17 +10,12 @@ import {
   View,
 } from "react-native";
 
-export default function PlusButton({ navigation }) {
+export default function PlusButton({ navigation }: any) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const navigateToMateria = () => {
     setModalVisible(false);
     navigation.navigate("addMateria");
-  };
-
-  const navigateToListStudents = () => {
-    setModalVisible(false);
-    navigation.navigate("Lista de Alunos");
   };
 
   return (
@@ -49,9 +44,7 @@ export default function PlusButton({ navigation }) {
             <View style={{ gap: 24 }}>
               <Pressable
                 style={{ flexDirection: "row", gap: 4 }}
-                // onPress={navigateToMateria}
-                // TESTING! Lembrar de tirar depois!
-                onPress={navigateToListStudents}
+                onPress={navigateToMateria}
               >
                 <FeatherIcons name="book" size={18} />
                 <Text>Nova Materia</Text>

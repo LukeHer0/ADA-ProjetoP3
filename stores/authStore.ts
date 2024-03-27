@@ -9,7 +9,7 @@ type StateProps = {
   user: null | User;
   verifyAuth: () => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
-  login: (data: LoginParams) => Promise<AxiosResponse<LoginResponse, any>>;
+  login: (data: LoginParams) => Promise<void>;
   register: (data: RegisterParams) => Promise<void>;
   logout: () => void;
 };
@@ -45,6 +45,7 @@ type RegisterParams = {
 type User = {
   name: string;
   email: string;
+  role: 'student' | 'teacher' | 'secretary';
   registration_id: string;
 };
 
@@ -61,7 +62,7 @@ export const useAuthStore = create<StateProps>((set) => ({
 
         const profileResponse = await api.get<User>("/me");
 
-        console.log("profileResponse", profileResponse.data);
+ 
 
         if (!profileResponse.data) {
           return await storage.remove({ key: "token" });
@@ -115,7 +116,6 @@ export const useAuthStore = create<StateProps>((set) => ({
 
     set({ token: loginResponse.data.access, user: profileResponse.data });
 
-    return loginResponse;
   },
 
   register: async (data: RegisterParams) => {

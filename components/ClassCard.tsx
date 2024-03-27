@@ -4,7 +4,7 @@ import { View, Pressable, Text, StyleSheet } from "react-native";
 export default function ClassCard({
   title,
   time,
-  description,
+  teacher,
   status,
   handleCardPress,
 }: any) {
@@ -12,24 +12,22 @@ export default function ClassCard({
     <Pressable onPress={handleCardPress}>
       <View
         style={
-          status === "confirmed"
+          status === "Confirmada"
             ? styles.materiaStyle
             : { ...styles.materiaStyle, ...styles.canceled }
         }
       >
-        <View style={{ width: "80%" }}>
+        <View style={{ width: "80%", justifyContent: 'center' }}>
           <Text
             style={
-              status === "confirmed"
+              status === "Confirmada"
                 ? styles.materiaTitle
                 : { ...styles.materiaTitle, textDecorationLine: "line-through" }
             }
           >
             {title}
           </Text>
-          <Text numberOfLines={1} style={styles.baseText}>
-            {description}
-          </Text>
+          {<Text style={styles.baseText}>Prof. {teacher}</Text>}
         </View>
         <View
           style={{
@@ -49,18 +47,19 @@ const styles = StyleSheet.create({
   materiaStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "#e5e7eb",
-
+    backgroundColor: "#bfdbfe",
+    height: 80,
     borderRadius: 10,
     paddingVertical: 15,
     marginBottom: 10,
     paddingHorizontal: 20,
+    gap: 20,
   },
   canceled: {
     opacity: 0.5,
   },
   baseText: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#1f2937",
   },
   materiaTitle: {
